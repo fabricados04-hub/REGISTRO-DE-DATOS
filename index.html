@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REGISTRO DE REPORTES</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f5f7;
+    color:#1f2937
+}
+
+header{
+    background:#17365d;
+    color:#fff;
+    padding:22px;
+    text-align:center
+}
+
+header h1{
+    margin:0;
+    font-size:28px
+}
+
+header p{
+    margin:7px 0 0;
+    font-size:13px
+}
+
+.container{
+    max-width:1500px;
+    margin:24px auto;
+    padding:0 18px
+}
+
+.card{
+    background:#fff;
+    border-radius:10px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 2px 10px #00000012
+}
+
+h2{
+    margin:0 0 18px;
+    color:#17365d;
+    font-size:18px;
+    border-bottom:2px solid #e5e7eb;
+    padding-bottom:10px
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px
+}
+
+.field{
+    display:flex;
+    flex-direction:column
+}
+
+.full{
+    grid-column:1/-1
+}
+
+label{
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:6px;
+    color:#374151
+}
+
+input,select,textarea{
+    width:100%;
+    border:1px solid #cbd5e1;
+    border-radius:6px;
+    padding:10px;
+    font-size:13px;
+    background:#fff
+}
+
+textarea{
+    min-height:80px;
+    resize:vertical
+}
+
+input:focus,select:focus,textarea:focus{
+    outline:none;
+    border-color:#17365d
+}
+
+.people-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center
+}
+
+.person-row{
+    display:grid;
+    grid-template-columns:2fr 1.2fr 1.5fr auto;
+    gap:10px;
+    align-items:end;
+    padding:12px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:7px;
+    margin-bottom:9px
+}
+
+.btn{
+    border:0;
+    border-radius:6px;
+    padding:10px 16px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:13px
+}
+
+.btn-primary{
+    background:#17365d;
+    color:#fff
+}
+
+.btn-success{
+    background:#15803d;
+    color:#fff
+}
+
+.btn-danger{
+    background:#b91c1c;
+    color:#fff
+}
+
+.btn-secondary{
+    background:#64748b;
+    color:#fff
+}
+
+.btn-warning{
+    background:#b45309;
+    color:#fff
+}
+
+.btn:hover{
+    filter:brightness(.93)
+}
+
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:18px
+}
+
+.preview-wrap{
+    overflow-x:auto
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1700px;
+    font-size:11px
+}
+
+th{
+    background:#17365d;
+    color:#fff;
+    padding:9px 7px;
+    text-align:left;
+    white-space:nowrap
+}
+
+td{
+    border:1px solid #dbe2ea;
+    padding:8px 7px;
+    vertical-align:top
+}
+
+tr:nth-child(even) td{
+    background:#f8fafc
+}
+
+.status{
+    margin-top:12px;
+    padding:10px;
+    border-radius:6px;
+    display:none;
+    font-size:13px
+}
+
+.status.ok{
+    display:block;
+    background:#dcfce7;
+    color:#166534
+}
+
+.status.error{
+    display:block;
+    background:#fee2e2;
+    color:#991b1b
+}
+
+.note{
+    font-size:12px;
+    color:#64748b;
+    margin-top:8px
+}
+
+@media(max-width:1100px){
+    .grid{
+        grid-template-columns:repeat(2,1fr)
+    }
+}
+
+@media(max-width:650px){
+    .grid{
+        grid-template-columns:1fr
+    }
+
+    .person-row{
+        grid-template-columns:1fr
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>REGISTRO DE REPORTES</h1>
+    <p>Sistema de registro y consolidación de información</p>
+</header>
+
+<div class="container">
+
+<!-- ================= INFORMACIÓN DEL REPORTE ================= -->
+
+<section class="card">
+
+    <h2>Información del reporte</h2>
+
+    <div class="grid">
+
+        <div class="field">
+            <label>FECHA</label>
+            <input type="date" id="fecha">
+        </div>
+
+        <div class="field">
+            <label>HORA</label>
+            <input type="time" id="hora">
+        </div>
+
+        <div class="field">
+            <label>PROVINCIA</label>
+            <input id="provincia" placeholder="Ej.: Pichincha">
+        </div>
+
+        <div class="field">
+            <label>CANTÓN</label>
+            <input id="canton" placeholder="Ej.: Quito">
+        </div>
+
+        <div class="field">
+            <label>LUGAR / SECTOR</label>
+            <input id="lugar" placeholder="Lugar o sector">
+        </div>
+
+        <div class="field">
+            <label>COORDENADAS</label>
+            <input id="coordenadas" placeholder="LATITUD, LONGITUD">
+        </div>
+
+        <div class="field">
+            <label>ÁMBITO</label>
+            <select id="ambito" onchange="actualizarSubambitos()">
+                <option value="">Seleccione...</option>
+                <option>Gobernabilidad y democracia</option>
+                <option>Justicia social y desarrollo humano</option>
+                <option>Relaciones internacionales y defensa</option>
+                <option>Sectores estratégicos</option>
+                <option>Justicia y seguridad ciudadana</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>TEMA / SUBÁMBITO / FENÓMENO</label>
+            <select id="subambito">
+                <option value="">Seleccione primero un ámbito...</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>TIPO DE EVENTO</label>
+            <input id="tipoEvento" placeholder="Ej.: Movilización, reunión, operativo">
+        </div>
+
+        <div class="field">
+            <label>CAUSA / MOTIVO</label>
+            <input id="causa" placeholder="Motivo principal">
+        </div>
+
+        <div class="field">
+            <label>ACTOR / ORGANIZACIÓN</label>
+            <input id="actor" placeholder="Persona, grupo u organización">
+        </div>
+
+        <div class="field">
+            <label>NIVEL DE RELEVANCIA</label>
+            <select id="relevancia">
+                <option value="">Seleccione...</option>
+                <option>Alta</option>
+                <option>Media</option>
+                <option>Baja</option>
+            </select>
+        </div>
+
+        <div class="field full">
+            <label>NOVEDAD / HECHO PRINCIPAL</label>
+            <textarea
+                id="novedad"
+                placeholder="Describa objetivamente el hecho principal..."
+            ></textarea>
+        </div>
+
+        <div class="field full">
+            <label>AFECTACIÓN / RESULTADO</label>
+            <textarea
+                id="afectacion"
+                placeholder="Indique afectaciones, resultados o situación actual..."
+            ></textarea>
+        </div>
+
+        <div class="field full">
+            <label>FUENTE</label>
+            <input
+                id="fuente"
+                placeholder="Ej.: Noticia, reporte, fuente abierta, verificación"
+            >
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= PERSONAS RELACIONADAS ================= -->
+
+<section class="card">
+
+    <div class="people-header">
+
+        <h2 style="margin:0;border:0;padding:0">
+            Personas relacionadas
+        </h2>
+
+        <button
+            type="button"
+            class="btn btn-primary"
+            onclick="agregarPersona()"
+        >
+            + AGREGAR PERSONA
+        </button>
+
+    </div>
+
+    <div id="personas"></div>
+
+    <div class="note">
+        Puede agregar tantas personas como sean necesarias.
+        Si no existen, deje esta sección vacía.
+    </div>
+
+</section>
+
+<!-- ================= ACCIONES ================= -->
+
+<section class="card">
+
+    <h2>Acciones</h2>
+
+    <div class="actions">
+
+        <button
+            type="button"
+            class="btn btn-success"
+            onclick="guardarReporte()"
+        >
+            GUARDAR
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="mostrarVistaPrevia()"
+        >
+            VISTA PREVIA
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-warning"
+            onclick="limpiarFormulario()"
+        >
+            LIMPIAR
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-danger"
+            onclick="descargarCSV()"
+        >
+            EXPORTAR CSV
+        </button>
+
+    </div>
+
+    <div id="status" class="status"></div>
+
+</section>
+
+<!-- ================= VISTA PREVIA ================= -->
+
+<section class="card" id="previewCard" style="display:none">
+
+    <h2>Vista previa — REGISTRO DE REPORTES</h2>
+
+    <div class="preview-wrap">
+
+        <table id="previewTable">
+
+            <thead></thead>
+
+            <tbody></tbody>
+
+        </table>
+
+    </div>
+
+    <div class="actions">
+
+        <button
+            type="button"
+            id="btnEnviar"
+            class="btn btn-success"
+            onclick="enviarMatriz()"
+        >
+            ENVIAR
+        </button>
+
+    </div>
+
+    <div class="note">
+        Verifique la información antes de enviarla.
+    </div>
+
+</section>
+
+</div>
+
+<script>
+
+/* =========================================================
+   SUBÁMBITOS
+========================================================= */
+
+const SUBAMBITOS = {
+
+    "Gobernabilidad y democracia": [
+        "Crisis institucionales",
+        "Procesos electorales",
+        "Conflictos político-institucionales",
+        "Movilizaciones de alcance nacional",
+        "Amenazas contra instituciones",
+        "Gobernabilidad"
+    ],
+
+    "Justicia social y desarrollo humano": [
+        "Frente indígena",
+        "Organizaciones laborales",
+        "Sector estudiantil",
+        "Organizaciones sociales",
+        "Conflictos comunitarios",
+        "Huelgas",
+        "Paralizaciones",
+        "Movilizaciones",
+        "Conflictos socioambientales"
+    ],
+
+    "Relaciones internacionales y defensa": [
+        "Geopolítica",
+        "Relaciones entre Estados",
+        "Conflictos internacionales",
+        "Frontera",
+        "Crimen transnacional",
+        "Narcotráfico transfronterizo",
+        "Tráfico de armas",
+        "Cooperación internacional"
+    ],
+
+    "Sectores estratégicos": [
+        "Minería",
+        "Minería ilegal",
+        "Proyectos mineros",
+        "Hidrocarburos",
+        "Energía eléctrica",
+        "Telecomunicaciones",
+        "Infraestructura crítica",
+        "Agua",
+        "Otros sectores estratégicos"
+    ],
+
+    "Justicia y seguridad ciudadana": [
+        "Crimen organizado",
+        "Narcotráfico",
+        "Homicidio",
+        "Secuestro",
+        "Extorsión",
+        "Tráfico de armas",
+        "Trata de personas",
+        "Terrorismo",
+        "Violencia criminal",
+        "Delincuencia común"
+    ]
+
+};
+
+
+/* =========================================================
+   ENCABEZADOS
+========================================================= */
+
+const HEADERS = [
+    "FECHA",
+    "HORA",
+    "PROVINCIA",
+    "CANTÓN",
+    "LUGAR / SECTOR",
+    "COORDENADAS",
+    "ÁMBITO",
+    "TEMA / SUBÁMBITO / FENÓMENO",
+    "TIPO DE EVENTO",
+    "CAUSA / MOTIVO",
+    "ACTOR / ORGANIZACIÓN",
+    "APELLIDOS Y NOMBRES",
+    "CÉDULA / RUC",
+    "CARGO / FUNCIÓN",
+    "NOVEDAD / HECHO PRINCIPAL",
+    "AFECTACIÓN / RESULTADO",
+    "NIVEL DE RELEVANCIA",
+    "FUENTE"
+];
+
+
+/* =========================================================
+   URL DEL GOOGLE APPS SCRIPT
+========================================================= */
+
+const WEB_APP_URL =
+"https://script.google.com/macros/s/AKfycbz0OHKznz97Wwj5upeEiRKQ6853AuDzihjobW3WMwcMR-RZB-xayZXm8Ce6SkLi6VLc/exec";
+
+
+/* =========================================================
+   REGISTROS LOCALES
+========================================================= */
+
+let registros = JSON.parse(
+    localStorage.getItem("REGISTRO_REPORTES") || "[]"
+);
+
+
+/* =========================================================
+   ACTUALIZAR SUBÁMBITOS
+========================================================= */
+
+function actualizarSubambitos() {
+
+    const ambito =
+        document.getElementById("ambito").value;
+
+    const s =
+        document.getElementById("subambito");
+
+    s.innerHTML =
+        '<option value="">Seleccione...</option>';
+
+    (SUBAMBITOS[ambito] || []).forEach(function(x) {
+
+        const o = document.createElement("option");
+
+        o.value = x;
+        o.textContent = x;
+
+        s.appendChild(o);
+
+    });
+
+}
+
+
+/* =========================================================
+   AGREGAR PERSONA
+========================================================= */
+
+function agregarPersona() {
+
+    const d = document.createElement("div");
+
+    d.className = "person-row";
+
+    d.innerHTML =
+        '<div class="field">' +
+            '<label>APELLIDOS Y NOMBRES</label>' +
+            '<input class="persona-nombre" placeholder="Apellidos y nombres">' +
+        '</div>' +
+
+        '<div class="field">' +
+            '<label>CÉDULA / RUC</label>' +
+            '<input class="persona-cedula" placeholder="Identificación">' +
+        '</div>' +
+
+        '<div class="field">' +
+            '<label>CARGO / FUNCIÓN</label>' +
+            '<input class="persona-cargo" placeholder="Cargo o función">' +
+        '</div>' +
+
+        '<button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">' +
+            'ELIMINAR' +
+        '</button>';
+
+    document.getElementById("personas").appendChild(d);
+
+}
+
+
+/* =========================================================
+   DATOS BASE
+========================================================= */
+
+function datosBase() {
+
+    return {
+
+        "FECHA":
+            document.getElementById("fecha").value,
+
+        "HORA":
+            document.getElementById("hora").value,
+
+        "PROVINCIA":
+            document.getElementById("provincia").value.trim(),
+
+        "CANTÓN":
+            document.getElementById("canton").value.trim(),
+
+        "LUGAR / SECTOR":
+            document.getElementById("lugar").value.trim(),
+
+        "COORDENADAS":
+            document.getElementById("coordenadas").value.trim(),
+
+        "ÁMBITO":
+            document.getElementById("ambito").value,
+
+        "TEMA / SUBÁMBITO / FENÓMENO":
+            document.getElementById("subambito").value,
+
+        "TIPO DE EVENTO":
+            document.getElementById("tipoEvento").value.trim(),
+
+        "CAUSA / MOTIVO":
+            document.getElementById("causa").value.trim(),
+
+        "ACTOR / ORGANIZACIÓN":
+            document.getElementById("actor").value.trim(),
+
+        "NOVEDAD / HECHO PRINCIPAL":
+            document.getElementById("novedad").value.trim(),
+
+        "AFECTACIÓN / RESULTADO":
+            document.getElementById("afectacion").value.trim(),
+
+        "NIVEL DE RELEVANCIA":
+            document.getElementById("relevancia").value,
+
+        "FUENTE":
+            document.getElementById("fuente").value.trim()
+
+    };
+
+}
+
+
+/* =========================================================
+   OBTENER REGISTROS
+========================================================= */
+
+function obtenerRegistros() {
+
+    const b = datosBase();
+
+    const personas = [
+        ...document.querySelectorAll(".person-row")
+    ];
+
+    /* Si no hay personas */
+
+    if (!personas.length) {
+
+        return [
+            {
+                ...b,
+                "APELLIDOS Y NOMBRES": "",
+                "CÉDULA / RUC": "",
+                "CARGO / FUNCIÓN": ""
+            }
+        ];
+
+    }
+
+    /* Si hay personas */
+
+    return personas.map(function(x) {
+
+        return {
+
+            ...b,
+
+            "APELLIDOS Y NOMBRES":
+                x.querySelector(".persona-nombre").value.trim(),
+
+            "CÉDULA / RUC":
+                x.querySelector(".persona-cedula").value.trim(),
+
+            "CARGO / FUNCIÓN":
+                x.querySelector(".persona-cargo").value.trim()
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   GUARDAR REPORTE
+========================================================= */
+
+function guardarReporte() {
+
+    const d = obtenerRegistros();
+
+    registros.push(...d);
+
+    localStorage.setItem(
+        "REGISTRO_REPORTES",
+        JSON.stringify(registros)
+    );
+
+    estado(
+        "Reporte guardado correctamente. Registros agregados: " + d.length,
+        "ok"
+    );
+
+    mostrarVistaPrevia();
+
+}
+
+
+/* =========================================================
+   VISTA PREVIA
+========================================================= */
+
+function mostrarVistaPrevia() {
+
+    const d = obtenerRegistros();
+
+    const t =
+        document.getElementById("previewTable");
+
+    t.querySelector("thead").innerHTML =
+        "<tr>" +
+        HEADERS.map(function(h) {
+            return "<th>" + h + "</th>";
+        }).join("") +
+        "</tr>";
+
+    t.querySelector("tbody").innerHTML =
+        d.map(function(r) {
+
+            return (
+                "<tr>" +
+                HEADERS.map(function(h) {
+
+                    return (
+                        "<td>" +
+                        esc(r[h] || "") +
+                        "</td>"
+                    );
+
+                }).join("") +
+                "</tr>"
+            );
+
+        }).join("");
+
+    document.getElementById("previewCard").style.display =
+        "block";
+
+    document
+        .getElementById("previewCard")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+/* =========================================================
+   ENVIAR A GOOGLE SHEETS
+========================================================= */
+
+async function enviarMatriz() {
+
+    const registrosEnviar = obtenerRegistros();
+
+    if (
+        !registrosEnviar ||
+        registrosEnviar.length === 0
+    ) {
+
+        alert(
+            "No existen registros para enviar."
+        );
+
+        return;
+
+    }
+
+    const boton =
+        document.getElementById("btnEnviar");
+
+    if (boton) {
+
+        boton.disabled = true;
+        boton.innerText = "ENVIANDO...";
+
+    }
+
+    try {
+
+        await fetch(WEB_APP_URL, {
+
+            method: "POST",
+
+            mode: "no-cors",
+
+            headers: {
+                "Content-Type":
+                    "text/plain;charset=utf-8"
+            },
+
+            body: JSON.stringify({
+                rows: registrosEnviar
+            })
+
+        });
+
+        /*
+         * Con mode:no-cors el navegador no puede leer
+         * la respuesta del Apps Script, pero la petición
+         * sí puede ser enviada.
+         */
+
+        alert(
+            "✅ INFORMACIÓN ENVIADA CORRECTAMENTE\n\n" +
+            "Los registros fueron enviados a Google Sheets.\n\n" +
+            "Revise la hoja:\n" +
+            "REGISTRO DE REPORTES"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Error al enviar:",
+            error
+        );
+
+        alert(
+            "❌ NO SE PUDO ENVIAR LA INFORMACIÓN\n\n" +
+            "Error: " +
+            error.message
+        );
+
+    } finally {
+
+        if (boton) {
+
+            boton.disabled = false;
+            boton.innerText = "ENVIAR";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   EXPORTAR CSV
+========================================================= */
+
+function descargarCSV() {
+
+    const d =
+        registros.length
+            ? registros
+            : obtenerRegistros();
+
+    let csv =
+        "\ufeff" +
+        HEADERS.join(",") +
+        "\n";
+
+    d.forEach(function(r) {
+
+        csv +=
+            HEADERS.map(function(h) {
+
+                return (
+                    '"' +
+                    String(r[h] || "")
+                        .replace(/"/g, '""') +
+                    '"'
+                );
+
+            }).join(",") +
+            "\n";
+
+    });
+
+    const a =
+        document.createElement("a");
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                    "text/csv;charset=utf-8"
+            }
+        );
+
+    a.href =
+        window.URL.createObjectURL(blob);
+
+    a.download =
+        "REGISTRO_DE_REPORTES.csv";
+
+    a.click();
+
+}
+
+
+/* =========================================================
+   LIMPIAR FORMULARIO
+========================================================= */
+
+function limpiarFormulario() {
+
+    document
+        .querySelectorAll("input,textarea")
+        .forEach(function(x) {
+            x.value = "";
+        });
+
+    document
+        .querySelectorAll("select")
+        .forEach(function(x) {
+            x.selectedIndex = 0;
+        });
+
+    document.getElementById("subambito").innerHTML =
+        '<option value="">Seleccione primero un ámbito...</option>';
+
+    document.getElementById("personas").innerHTML =
+        "";
+
+    document.getElementById("previewCard").style.display =
+        "none";
+
+    document.getElementById("status").className =
+        "status";
+
+    document.getElementById("status").textContent =
+        "";
+
+}
+
+
+/* =========================================================
+   MENSAJES DE ESTADO
+========================================================= */
+
+function estado(texto, clase) {
+
+    const x =
+        document.getElementById("status");
+
+    x.textContent = texto;
+
+    x.className =
+        "status " + clase;
+
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function esc(t) {
+
+    return String(t)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
