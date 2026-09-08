@@ -284,12 +284,7 @@ tr:nth-child(even) td{
 
         <div class="field">
             <label>REPORTE</label>
-            <select id="reporte">
-                <option value="">Seleccione reporte...</option>
-                <option>Directo</option>
-                <option>Resumen</option>
-                <option>Consolidado</option>
-            </select>
+            <input id="reporte" placeholder="Escriba el tipo de reporte...">
         </div>
 
         <div class="field">
@@ -813,7 +808,7 @@ function datosBase() {
             document.getElementById("lugar").value.trim(),
 
         "REPORTE":
-            document.getElementById("reporte").value,
+            document.getElementById("reporte").value.trim(),
 
         "COORDENADAS":
             document.getElementById("coordenadas").value.trim(),
