@@ -170,7 +170,7 @@ input:focus,select:focus,textarea:focus{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:1800px;
+    min-width:1900px;
     font-size:11px
 }
 
@@ -319,6 +319,19 @@ tr:nth-child(even) td{
             </select>
         </div>
 
+        <div class="field">
+            <label>INTERVENCIÓN</label>
+            <select id="intervencion" onchange="evaluarOtrasIntervencion()">
+                <option value="">Seleccione intervención...</option>
+                <option value="INTELIGENCIA-PREVENTIVO">INTELIGENCIA-PREVENTIVO</option>
+                <option value="INTELIGENCIA - INVESTIGATIVO">INTELIGENCIA - INVESTIGATIVO</option>
+                <option value="INTELIGENCIA">INTELIGENCIA</option>
+                <option value="FUERZAS ARMADAS">FUERZAS ARMADAS</option>
+                <option value="OTRAS">OTRAS</option>
+            </select>
+            <input type="text" id="intervencionOtras" placeholder="Especifique otra intervención..." style="display:none; margin-top:6px;">
+        </div>
+
         <div class="field full">
             <label>NOVEDAD / HECHO PRINCIPAL</label>
             <textarea id="novedad" placeholder="Describa objetivamente el hecho principal..."></textarea>
@@ -417,7 +430,7 @@ const FUENTES = [
 ];
 
 const HEADERS = [
-    "FECHA", "HORA", "PROVINCIA", "CANTÓN", "LUGAR / SECTOR", "COORDENADAS", "ÁMBITO", "TEMA / SUBÁMBITO / FENÓMENO", "REPORTE", "APELLIDOS Y NOMBRES", "CÉDULA / RUC", "CARGO / FUNCIÓN", "NOVEDAD / HECHO PRINCIPAL", "AFECTACIÓN / RESULTADO", "NIVEL DE RELEVANCIA", "FUENTE"
+    "FECHA", "HORA", "PROVINCIA", "CANTÓN", "LUGAR / SECTOR", "COORDENADAS", "ÁMBITO", "TEMA / SUBÁMBITO / FENÓMENO", "REPORTE", "APELLIDOS Y NOMBRES", "CÉDULA / RUC", "CARGO / FUNCIÓN", "NOVEDAD / HECHO PRINCIPAL", "AFECTACIÓN / RESULTADO", "NIVEL DE RELEVANCIA", "FUENTE", "INTERVENCION"
 ];
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyHgKKaVK7Ok1kE7rXZKkaDOBbkDAHsQLcIpZRRyAj9CAJlXQlGmWSj-cI4lDoXhUH4-w/exec";
@@ -449,6 +462,18 @@ window.onload = function() {
         fueSelect.appendChild(o);
     });
 };
+
+function evaluarOtrasIntervencion() {
+    const sel = document.getElementById("intervencion").value;
+    const campoOtras = document.getElementById("intervencionOtras");
+    if (sel === "OTRAS") {
+        campoOtras.style.display = "block";
+        campoOtras.focus();
+    } else {
+        campoOtras.style.display = "none";
+        campoOtras.value = "";
+    }
+}
 
 function actualizarCantones() {
     const prov = document.getElementById("provincia").value;
@@ -496,6 +521,12 @@ function agregarPersona() {
 }
 
 function datosBase() {
+    let valIntervencion = document.getElementById("intervencion").value;
+    if (valIntervencion === "OTRAS") {
+        const txtOtras = document.getElementById("intervencionOtras").value.trim();
+        valIntervencion = txtOtras ? "OTRAS: " + txtOtras : "OTRAS";
+    }
+
     return {
         "FECHA": document.getElementById("fecha").value,
         "HORA": document.getElementById("hora").value,
@@ -509,7 +540,8 @@ function datosBase() {
         "NOVEDAD / HECHO PRINCIPAL": document.getElementById("novedad").value.trim(),
         "AFECTACIÓN / RESULTADO": document.getElementById("afectacion").value.trim(),
         "NIVEL DE RELEVANCIA": document.getElementById("relevancia").value,
-        "FUENTE": document.getElementById("fuente").value
+        "FUENTE": document.getElementById("fuente").value,
+        "INTERVENCION": valIntervencion
     };
 }
 
@@ -611,6 +643,7 @@ function descargarCSV() {
 function limpiarFormulario() {
     document.querySelectorAll("input,textarea").forEach(x => x.value = "");
     document.querySelectorAll("select").forEach(x => x.selectedIndex = 0);
+    document.getElementById("intervencionOtras").style.display = "none";
     document.getElementById("canton").innerHTML = '<option value="">Seleccione primero provincia...</option>';
     document.getElementById("subambito").innerHTML = '<option value="">Seleccione primero un ámbito...</option>';
     document.getElementById("personas").innerHTML = "";
