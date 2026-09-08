@@ -245,14 +245,10 @@ tr:nth-child(even) td{
 
 <div class="container">
 
-<!-- ================= INFORMACIÓN DEL REPORTE ================= -->
-
+<!-- INFORMACIÓN DEL REPORTE -->
 <section class="card">
-
     <h2>Información del reporte</h2>
-
     <div class="grid">
-
         <div class="field">
             <label>FECHA</label>
             <input type="date" id="fecha">
@@ -325,144 +321,56 @@ tr:nth-child(even) td{
 
         <div class="field full">
             <label>NOVEDAD / HECHO PRINCIPAL</label>
-            <textarea
-                id="novedad"
-                placeholder="Describa objetivamente el hecho principal..."
-            ></textarea>
+            <textarea id="novedad" placeholder="Describa objetivamente el hecho principal..."></textarea>
         </div>
 
         <div class="field full">
             <label>AFECTACIÓN / RESULTADO</label>
-            <textarea
-                id="afectacion"
-                placeholder="Indique afectaciones, resultados o situación actual..."
-            ></textarea>
+            <textarea id="afectacion" placeholder="Indique afectaciones, resultados o situación actual..."></textarea>
         </div>
-
     </div>
-
 </section>
 
-<!-- ================= PERSONAS RELACIONADAS ================= -->
-
+<!-- PERSONAS RELACIONADAS -->
 <section class="card">
-
     <div class="people-header">
-
-        <h2 style="margin:0;border:0;padding:0">
-            Personas relacionadas
-        </h2>
-
-        <button
-            type="button"
-            class="btn btn-primary"
-            onclick="agregarPersona()"
-        >
-            + AGREGAR PERSONA
-        </button>
-
+        <h2 style="margin:0;border:0;padding:0">Personas relacionadas</h2>
+        <button type="button" class="btn btn-primary" onclick="agregarPersona()">+ AGREGAR PERSONA</button>
     </div>
-
     <div id="personas"></div>
-
-    <div class="note">
-        Puede agregar tantas personas como sean necesarias.
-        Si no existen, deje esta sección vacía.
-    </div>
-
+    <div class="note">Puede agregar tantas personas como sean necesarias. Si no existen, deje esta sección vacía.</div>
 </section>
 
-<!-- ================= ACCIONES ================= -->
-
+<!-- ACCIONES -->
 <section class="card">
-
     <h2>Acciones</h2>
-
     <div class="actions">
-
-        <button
-            type="button"
-            class="btn btn-success"
-            onclick="guardarReporte()"
-        >
-            GUARDAR
-        </button>
-
-        <button
-            type="button"
-            class="btn btn-secondary"
-            onclick="mostrarVistaPrevia()"
-        >
-            VISTA PREVIA
-        </button>
-
-        <button
-            type="button"
-            class="btn btn-warning"
-            onclick="limpiarFormulario()"
-        >
-            LIMPIAR
-        </button>
-
-        <button
-            type="button"
-            class="btn btn-danger"
-            onclick="descargarCSV()"
-        >
-            EXPORTAR CSV
-        </button>
-
+        <button type="button" class="btn btn-success" onclick="guardarReporte()">GUARDAR</button>
+        <button type="button" class="btn btn-secondary" onclick="mostrarVistaPrevia()">VISTA PREVIA</button>
+        <button type="button" class="btn btn-warning" onclick="limpiarFormulario()">LIMPIAR</button>
+        <button type="button" class="btn btn-danger" onclick="descargarCSV()">EXPORTAR CSV</button>
     </div>
-
     <div id="status" class="status"></div>
-
 </section>
 
-<!-- ================= VISTA PREVIA ================= -->
-
+<!-- VISTA PREVIA -->
 <section class="card" id="previewCard" style="display:none">
-
     <h2>Vista previa — REGISTRO DE REPORTES</h2>
-
     <div class="preview-wrap">
-
         <table id="previewTable">
-
             <thead></thead>
-
             <tbody></tbody>
-
         </table>
-
     </div>
-
     <div class="actions">
-
-        <button
-            type="button"
-            id="btnEnviar"
-            class="btn btn-success"
-            onclick="enviarMatriz()"
-        >
-            ENVIAR
-        </button>
-
+        <button type="button" id="btnEnviar" class="btn btn-success" onclick="enviarMatriz()">ENVIAR</button>
     </div>
-
-    <div class="note">
-        Verifique la información antes de enviarla.
-    </div>
-
+    <div class="note">Verifique la información antes de enviarla.</div>
 </section>
 
 </div>
 
 <script>
-
-/* =========================================================
-   CANTONES POR PROVINCIA
-========================================================= */
-
 const CANTONES = {
     "AZUAY": ["CUENCA", "CAMILO PONCE ENRÍQUEZ", "CHORDELEG", "EL PAN", "GIRÓN", "GUACHAPALA", "GUALACEO", "NABÓN", "OÑA", "PAUTE", "PUCARÁ", "SAN FERNANDO", "SANTA ISABEL", "SEVILLA DE ORO", "SÍGSIG"],
     "BOLÍVAR": ["GUARANDA", "CHILLANES", "CHIMBO", "ECHEANDÍA", "LAS NAVES", "SAN MIGUEL", "CALUMA"],
@@ -490,205 +398,35 @@ const CANTONES = {
     "ORELLANA": ["FRANCISCO DE ORELLANA", "AGUARICO", "LA JOYA DE LOS SACHAS", "LORETO"]
 };
 
-
-/* =========================================================
-   SUBÁMBITOS
-========================================================= */
-
 const SUBAMBITOS = {
-    "1. GOBERNABILIDAD E INSTITUCIONALIDAD DEL ESTADO": [
-        "CRISIS INSTITUCIONALES",
-        "PROCESOS ELECTORALES",
-        "CONFLICTOS POLÍTICO-INSTITUCIONALES",
-        "AMENAZAS CONTRA INSTITUCIONES DEL ESTADO",
-        "AFECTACIONES A LA GOBERNABILIDAD",
-        "FUNCIONAMIENTO DE ENTIDADES PÚBLICAS"
-    ],
-    "2. CONFLICTIVIDAD SOCIAL Y MOVILIZACIÓN": [
-        "MOVILIZACIONES",
-        "MANIFESTACIONES",
-        "HUELGAS Y PARALIZACIONES",
-        "CONFLICTOS COMUNITARIOS",
-        "CONFLICTOS SOCIOAMBIENTALES",
-        "ORGANIZACIONES SOCIALES",
-        "ORGANIZACIONES LABORALES",
-        "SECTOR ESTUDIANTIL",
-        "ORGANIZACIONES INDÍGENAS"
-    ],
-    "3. ENTORNO INTERNACIONAL Y FRONTERIZO": [
-        "GEOPOLÍTICA",
-        "RELACIONES ENTRE ESTADOS",
-        "CONFLICTOS INTERNACIONALES",
-        "SEGURIDAD FRONTERIZA",
-        "CRIMEN TRANSNACIONAL",
-        "NARCOTRÁFICO TRANSFRONTERIZO",
-        "TRÁFICO TRANSFRONTERIZO DE ARMAS",
-        "COOPERACIÓN INTERNACIONAL"
-    ],
-    "4. SECTORES ESTRATÉGICOS E INFRAESTRUCTURA CRÍTICA": [
-        "MINERÍA",
-        "MINERÍA ILEGAL",
-        "PROYECTOS MINEROS",
-        "HIDROCARBUROS",
-        "ENERGÍA ELÉCTRICA",
-        "TELECOMUNICACIONES",
-        "AGUA",
-        "INFRAESTRUCTURA CRÍTICA",
-        "OTROS SECTORES ESTRATÉGICOS"
-    ],
-    "5. CRIMINALIDAD Y DELINCUENCIA ORGANIZADA": [
-        "CRIMEN ORGANIZADO",
-        "NARCOTRÁFICO",
-        "HOMICIDIO",
-        "SECUESTRO",
-        "EXTORSIÓN",
-        "TRÁFICO DE ARMAS",
-        "TRATA DE PERSONAS",
-        "TERRORISMO",
-        "DELINCUENCIA COMÚN",
-        "VIOLENCIA CRIMINAL"
-    ],
-    "6. CENTROS DE PRIVACIÓN DE LIBERTAD": [
-        "OPERATIVOS EN C.P.L.",
-        "MONITOREO DE C.P.L.",
-        "DECOMISO DE OBJETOS PROHIBIDOS",
-        "INGRESO DE PPL",
-        "SALIDA DE PPL",
-        "REUBICACIÓN DE PPL",
-        "FALLECIMIENTO DE PPL",
-        "PERSONAS HERIDAS EN C.P.L.",
-        "DELITOS COMETIDOS EN C.P.L.",
-        "OPERACIÓN ATLAS",
-        "OTRAS ACTIVIDADES EN C.P.L."
-    ],
-    "7. ACTIVIDAD JUDICIAL Y CUMPLIMIENTO DE DISPOSICIONES": [
-        "INSTALACIÓN DE AUDIENCIAS",
-        "DILIGENCIAS JUDICIALES CON PPL",
-        "CUMPLIMIENTO DE BOLETAS",
-        "DISPOSICIONES JUDICIALES",
-        "TRASLADOS PARA DILIGENCIAS JUDICIALES"
-    ],
-    "8. SEGURIDAD Y OPERACIONES POLICIALES": [
-        "OPERATIVOS POLICIALES",
-        "LEVANTAMIENTO DE INFORMACIÓN",
-        "RECONSTRUCCIÓN DE LOS HECHOS",
-        "VERIFICACIÓN DE PERSONAS Y OBJETOS EN ACTITUD INUSUAL",
-        "INCAUTACIÓN DE ARMAS DE FUEGO Y MUNICIONES"
-    ],
-    "9. INCIDENTES, EMERGENCIAS Y AFECTACIONES A PERSONAS": [
-        "PERSONAS FALLECIDAS",
-        "PERSONAS HERIDAS",
-        "PERSONAS DESAPARECIDAS",
-        "INCENDIOS",
-        "ACCIDENTES",
-        "EMERGENCIAS",
-        "OTROS INCIDENTES RELEVANTES"
-    ],
-    "10. EVENTOS Y CONCENTRACIONES DE PERSONAS": [
-        "ENCUENTROS DEPORTIVOS",
-        "EVENTOS MASIVOS",
-        "CONCENTRACIONES PÚBLICAS",
-        "ACTIVIDADES PÚBLICAS",
-        "EVENTOS DE RELEVANCIA"
-    ],
-    "11. SERVIDORES POLICIALES E INSTITUCIONALIDAD POLICIAL": [
-        "NOVEDADES CON SERVIDORES POLICIALES",
-        "EVALUACIONES FÍSICAS DE SERVIDORES POLICIALES",
-        "ACCIDENTES DE SERVIDORES POLICIALES",
-        "NOVEDADES EN INSTALACIONES POLICIALES",
-        "ACTIVIDADES INSTITUCIONALES"
-    ]
+    "1. GOBERNABILIDAD E INSTITUCIONALIDAD DEL ESTADO": ["CRISIS INSTITUCIONALES", "PROCESOS ELECTORALES", "CONFLICTOS POLÍTICO-INSTITUCIONALES", "AMENAZAS CONTRA INSTITUCIONES DEL ESTADO", "AFECTACIONES A LA GOBERNABILIDAD", "FUNCIONAMIENTO DE ENTIDADES PÚBLICAS"],
+    "2. CONFLICTIVIDAD SOCIAL Y MOVILIZACIÓN": ["MOVILIZACIONES", "MANIFESTACIONES", "HUELGAS Y PARALIZACIONES", "CONFLICTOS COMUNITARIOS", "CONFLICTOS SOCIOAMBIENTALES", "ORGANIZACIONES SOCIALES", "ORGANIZACIONES LABORALES", "SECTOR ESTUDIANTIL", "ORGANIZACIONES INDÍGENAS"],
+    "3. ENTORNO INTERNACIONAL Y FRONTERIZO": ["GEOPOLÍTICA", "RELACIONES ENTRE ESTADOS", "CONFLICTOS INTERNACIONALES", "SEGURIDAD FRONTERIZA", "CRIMEN TRANSNACIONAL", "NARCOTRÁFICO TRANSFRONTERIZO", "TRÁFICO TRANSFRONTERIZO DE ARMAS", "COOPERACIÓN INTERNACIONAL"],
+    "4. SECTORES ESTRATÉGICOS E INFRAESTRUCTURA CRÍTICA": ["MINERÍA", "MINERÍA ILEGAL", "PROYECTOS MINEROS", "HIDROCARBUROS", "ENERGÍA ELÉCTRICA", "TELECOMUNICACIONES", "AGUA", "INFRAESTRUCTURA CRÍTICA", "OTROS SECTORES ESTRATÉGICOS"],
+    "5. CRIMINALIDAD Y DELINCUENCIA ORGANIZADA": ["CRIMEN ORGANIZADO", "NARCOTRÁFICO", "HOMICIDIO", "SECUESTRO", "EXTORSIÓN", "TRÁFICO DE ARMAS", "TRATA DE PERSONAS", "TERRORISMO", "DELINCUENCIA COMÚN", "VIOLENCIA CRIMINAL"],
+    "6. CENTROS DE PRIVACIÓN DE LIBERTAD": ["OPERATIVOS EN C.P.L.", "MONITOREO DE C.P.L.", "DECOMISO DE OBJETOS PROHIBIDOS", "INGRESO DE PPL", "SALIDA DE PPL", "REUBICACIÓN DE PPL", "FALLECIMIENTO DE PPL", "PERSONAS HERIDAS EN C.P.L.", "DELITOS COMETIDOS EN C.P.L.", "OPERACIÓN ATLAS", "OTRAS ACTIVIDADES EN C.P.L."],
+    "7. ACTIVIDAD JUDICIAL Y CUMPLIMIENTO DE DISPOSICIONES": ["INSTALACIÓN DE AUDIENCIAS", "DILIGENCIAS JUDICIALES CON PPL", "CUMPLIMIENTO DE BOLETAS", "DISPOSICIONES JUDICIALES", "TRASLADOS PARA DILIGENCIAS JUDICIALES"],
+    "8. SEGURIDAD Y OPERACIONES POLICIALES": ["OPERATIVOS POLICIALES", "LEVANTAMIENTO DE INFORMACIÓN", "RECONSTRUCCIÓN DE LOS HECHOS", "VERIFICACIÓN DE PERSONAS Y OBJETOS EN ACTITUD INUSUAL", "INCAUTACIÓN DE ARMAS DE FUEGO Y MUNICIONES"],
+    "9. INCIDENTES, EMERGENCIAS Y AFECTACIONES A PERSONAS": ["PERSONAS FALLECIDAS", "PERSONAS HERIDAS", "PERSONAS DESAPARECIDAS", "INCENDIOS", "ACCIDENTES", "EMERGENCIAS", "OTROS INCIDENTES RELEVANTES"],
+    "10. EVENTOS Y CONCENTRACIONES DE PERSONAS": ["ENCUENTROS DEPORTIVOS", "EVENTOS MASIVOS", "CONCENTRACIONES PÚBLICAS", "ACTIVIDADES PÚBLICAS", "EVENTOS DE RELEVANCIA"],
+    "11. SERVIDORES POLICIALES E INSTITUCIONALIDAD POLICIAL": ["NOVEDADES CON SERVIDORES POLICIALES", "EVALUACIONES FÍSICAS DE SERVIDORES POLICIALES", "ACCIDENTES DE SERVIDORES POLICIALES", "NOVEDADES EN INSTALACIONES POLICIALES", "ACTIVIDADES INSTITUCIONALES"]
 };
 
-
-/* =========================================================
-   FUENTES
-========================================================= */
-
 const FUENTES = [
-    "SZI-CARCHI",
-    "SZI-SUCUMBIOS",
-    "SZI-IMBABURA",
-    "SZI-ESMERALDAS",
-    "SZI-NAPO",
-    "SZI-ORELLANA",
-    "SZI-PICHINCHA",
-    "SZI-TUNGURAHUA",
-    "SZI-PASTAZA",
-    "SZI-COTOPAXI",
-    "SZI-CHIMBORAZO",
-    "SZI-MANABI-PORTOVIEJO",
-    "SZI-MANABI-MANTA",
-    "SZI-SANTO DOMINGO",
-    "SZI-BOLIVAR",
-    "SZI-LOS RIOS BABAHOYO",
-    "SZI-LOS RIOS QUEVEDO",
-    "SZI-SANTA ELENA",
-    "SZI-GALAPAGOS",
-    "SZI-GUAYAS-MILAGRO",
-    "SZI-AZUAY",
-    "SZI-CAÑAR",
-    "SZI-MORONA SANTIAGO",
-    "SZI-EL ORO",
-    "SZI-LOJA",
-    "SZI-ZAMORA CHINCHIPE",
-    "SZI-ZONA 9",
-    "SZI-ZONA 8",
-    "UNIP",
-    "UNIT",
-    "UNISOP",
-    "UNIAM"
+    "SZI-CARCHI", "SZI-SUCUMBIOS", "SZI-IMBABURA", "SZI-ESMERALDAS", "SZI-NAPO", "SZI-ORELLANA", "SZI-PICHINCHA", "SZI-TUNGURAHUA", "SZI-PASTAZA", "SZI-COTOPAXI", "SZI-CHIMBORAZO", "SZI-MANABI-PORTOVIEJO", "SZI-MANABI-MANTA", "SZI-SANTO DOMINGO", "SZI-BOLIVAR", "SZI-LOS RIOS BABAHOYO", "SZI-LOS RIOS QUEVEDO", "SZI-SANTA ELENA", "SZI-GALAPAGOS", "SZI-GUAYAS-MILAGRO", "SZI-AZUAY", "SZI-CAÑAR", "SZI-MORONA SANTIAGO", "SZI-EL ORO", "SZI-LOJA", "SZI-ZAMORA CHINCHIPE", "SZI-ZONA 9", "SZI-ZONA 8", "UNIP", "UNIT", "UNISOP", "UNIAM"
 ];
-
-
-/* =========================================================
-   ENCABEZADOS (REPORTE EN POSICIÓN 9 - COLUMNA I)
-========================================================= */
 
 const HEADERS = [
-    "FECHA",                       // A (1)
-    "HORA",                        // B (2)
-    "PROVINCIA",                   // C (3)
-    "CANTÓN",                      // D (4)
-    "LUGAR / SECTOR",              // E (5)
-    "COORDENADAS",                 // F (6)
-    "ÁMBITO",                      // G (7)
-    "TEMA / SUBÁMBITO / FENÓMENO", // H (8)
-    "REPORTE",                     // I (9) <--- COLUMNA I
-    "APELLIDOS Y NOMBRES",        // J (10)
-    "CÉDULA / RUC",                // K (11)
-    "CARGO / FUNCIÓN",             // L (12)
-    "NOVEDAD / HECHO PRINCIPAL",   // M (13)
-    "AFECTACIÓN / RESULTADO",      // N (14)
-    "NIVEL DE RELEVANCIA",         // O (15)
-    "FUENTE"                       // P (16)
+    "FECHA", "HORA", "PROVINCIA", "CANTÓN", "LUGAR / SECTOR", "COORDENADAS", "ÁMBITO", "TEMA / SUBÁMBITO / FENÓMENO", "REPORTE", "APELLIDOS Y NOMBRES", "CÉDULA / RUC", "CARGO / FUNCIÓN", "NOVEDAD / HECHO PRINCIPAL", "AFECTACIÓN / RESULTADO", "NIVEL DE RELEVANCIA", "FUENTE"
 ];
 
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyHgKKaVK7Ok1kE7rXZKkaDOBbkDAHsQLcIpZRRyAj9CAJlXQlGmWSj-cI4lDoXhUH4-w/exec";
 
-/* =========================================================
-   URL DEL GOOGLE APPS SCRIPT
-========================================================= */
-
-const WEB_APP_URL =
-"https://script.google.com/macros/s/AKfycbyHgKKaVK7Ok1kE7rXZKkaDOBbkDAHsQLcIpZRRyAj9CAJlXQlGmWSj-cI4lDoXhUH4-w/exec";
-
-
-/* =========================================================
-   REGISTROS LOCALES
-========================================================= */
-
-let registros = JSON.parse(
-    localStorage.getItem("REGISTRO_REPORTES") || "[]"
-);
-
-
-/* =========================================================
-   INICIALIZACIÓN DE DESPLEGABLES
-========================================================= */
+let registros = JSON.parse(localStorage.getItem("REGISTRO_REPORTES") || "[]");
 
 window.onload = function() {
     const provSelect = document.getElementById("provincia");
-    Object.keys(CANTONES).forEach(function(prov) {
+    Object.keys(CANTONES).forEach(prov => {
         const o = document.createElement("option");
         o.value = prov;
         o.textContent = prov;
@@ -696,7 +434,7 @@ window.onload = function() {
     });
 
     const ambSelect = document.getElementById("ambito");
-    Object.keys(SUBAMBITOS).forEach(function(amb) {
+    Object.keys(SUBAMBITOS).forEach(amb => {
         const o = document.createElement("option");
         o.value = amb;
         o.textContent = amb;
@@ -704,7 +442,7 @@ window.onload = function() {
     });
 
     const fueSelect = document.getElementById("fuente");
-    FUENTES.forEach(function(f) {
+    FUENTES.forEach(f => {
         const o = document.createElement("option");
         o.value = f;
         o.textContent = f;
@@ -712,17 +450,11 @@ window.onload = function() {
     });
 };
 
-
-/* =========================================================
-   ACTUALIZAR CANTONES
-========================================================= */
-
 function actualizarCantones() {
     const prov = document.getElementById("provincia").value;
     const c = document.getElementById("canton");
     c.innerHTML = '<option value="">Seleccione cantón...</option>';
-
-    (CANTONES[prov] || []).forEach(function(x) {
+    (CANTONES[prov] || []).forEach(x => {
         const o = document.createElement("option");
         o.value = x;
         o.textContent = x;
@@ -730,17 +462,11 @@ function actualizarCantones() {
     });
 }
 
-
-/* =========================================================
-   ACTUALIZAR SUBÁMBITOS
-========================================================= */
-
 function actualizarSubambitos() {
     const ambito = document.getElementById("ambito").value;
     const s = document.getElementById("subambito");
     s.innerHTML = '<option value="">Seleccione subámbito...</option>';
-
-    (SUBAMBITOS[ambito] || []).forEach(function(x) {
+    (SUBAMBITOS[ambito] || []).forEach(x => {
         const o = document.createElement("option");
         o.value = x;
         o.textContent = x;
@@ -748,426 +474,165 @@ function actualizarSubambitos() {
     });
 }
 
-
-/* =========================================================
-   AGREGAR PERSONA
-========================================================= */
-
 function agregarPersona() {
-
     const d = document.createElement("div");
-
     d.className = "person-row";
-
-    d.innerHTML =
-        '<div class="field">' +
-            '<label>APELLIDOS Y NOMBRES</label>' +
-            '<input class="persona-nombre" placeholder="Apellidos y nombres">' +
-        '</div>' +
-
-        '<div class="field">' +
-            '<label>CÉDULA / RUC</label>' +
-            '<input class="persona-cedula" placeholder="Identificación">' +
-        '</div>' +
-
-        '<div class="field">' +
-            '<label>CARGO / FUNCIÓN</label>' +
-            '<input class="persona-cargo" placeholder="Cargo o función">' +
-        '</div>' +
-
-        '<button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">' +
-            'ELIMINAR' +
-        '</button>';
-
+    d.innerHTML = `
+        <div class="field">
+            <label>APELLIDOS Y NOMBRES</label>
+            <input class="persona-nombre" placeholder="Apellidos y nombres">
+        </div>
+        <div class="field">
+            <label>CÉDULA / RUC</label>
+            <input class="persona-cedula" placeholder="Identificación">
+        </div>
+        <div class="field">
+            <label>CARGO / FUNCIÓN</label>
+            <input class="persona-cargo" placeholder="Cargo o función">
+        </div>
+        <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">ELIMINAR</button>
+    `;
     document.getElementById("personas").appendChild(d);
-
 }
-
-
-/* =========================================================
-   DATOS BASE
-========================================================= */
 
 function datosBase() {
-
     return {
-
-        "FECHA":
-            document.getElementById("fecha").value,
-
-        "HORA":
-            document.getElementById("hora").value,
-
-        "PROVINCIA":
-            document.getElementById("provincia").value,
-
-        "CANTÓN":
-            document.getElementById("canton").value,
-
-        "LUGAR / SECTOR":
-            document.getElementById("lugar").value.trim(),
-
-        "COORDENADAS":
-            document.getElementById("coordenadas").value.trim(),
-
-        "ÁMBITO":
-            document.getElementById("ambito").value,
-
-        "TEMA / SUBÁMBITO / FENÓMENO":
-            document.getElementById("subambito").value,
-
-        "REPORTE":
-            document.getElementById("reporte").value.trim(),
-
-        "NOVEDAD / HECHO PRINCIPAL":
-            document.getElementById("novedad").value.trim(),
-
-        "AFECTACIÓN / RESULTADO":
-            document.getElementById("afectacion").value.trim(),
-
-        "NIVEL DE RELEVANCIA":
-            document.getElementById("relevancia").value,
-
-        "FUENTE":
-            document.getElementById("fuente").value
-
+        "FECHA": document.getElementById("fecha").value,
+        "HORA": document.getElementById("hora").value,
+        "PROVINCIA": document.getElementById("provincia").value,
+        "CANTÓN": document.getElementById("canton").value,
+        "LUGAR / SECTOR": document.getElementById("lugar").value.trim(),
+        "COORDENADAS": document.getElementById("coordenadas").value.trim(),
+        "ÁMBITO": document.getElementById("ambito").value,
+        "TEMA / SUBÁMBITO / FENÓMENO": document.getElementById("subambito").value,
+        "REPORTE": document.getElementById("reporte").value.trim(),
+        "NOVEDAD / HECHO PRINCIPAL": document.getElementById("novedad").value.trim(),
+        "AFECTACIÓN / RESULTADO": document.getElementById("afectacion").value.trim(),
+        "NIVEL DE RELEVANCIA": document.getElementById("relevancia").value,
+        "FUENTE": document.getElementById("fuente").value
     };
-
 }
-
-
-/* =========================================================
-   OBTENER REGISTROS
-========================================================= */
 
 function obtenerRegistros() {
-
     const b = datosBase();
-
-    const personas = [
-        ...document.querySelectorAll(".person-row")
-    ];
+    const personas = [...document.querySelectorAll(".person-row")];
 
     if (!personas.length) {
-
-        return [
-            {
-                ...b,
-                "APELLIDOS Y NOMBRES": "",
-                "CÉDULA / RUC": "",
-                "CARGO / FUNCIÓN": ""
-            }
-        ];
-
+        return [{
+            ...b,
+            "APELLIDOS Y NOMBRES": "",
+            "CÉDULA / RUC": "",
+            "CARGO / FUNCIÓN": ""
+        }];
     }
 
-    return personas.map(function(x) {
-
-        return {
-
-            ...b,
-
-            "APELLIDOS Y NOMBRES":
-                x.querySelector(".persona-nombre").value.trim(),
-
-            "CÉDULA / RUC":
-                x.querySelector(".persona-cedula").value.trim(),
-
-            "CARGO / FUNCIÓN":
-                x.querySelector(".persona-cargo").value.trim()
-
-        };
-
-    });
-
+    return personas.map(x => ({
+        ...b,
+        "APELLIDOS Y NOMBRES": x.querySelector(".persona-nombre").value.trim(),
+        "CÉDULA / RUC": x.querySelector(".persona-cedula").value.trim(),
+        "CARGO / FUNCIÓN": x.querySelector(".persona-cargo").value.trim()
+    }));
 }
-
-
-/* =========================================================
-   GUARDAR REPORTE
-========================================================= */
 
 function guardarReporte() {
-
     const d = obtenerRegistros();
-
     registros.push(...d);
-
-    localStorage.setItem(
-        "REGISTRO_REPORTES",
-        JSON.stringify(registros)
-    );
-
-    estado(
-        "Reporte guardado correctamente. Registros agregados: " + d.length,
-        "ok"
-    );
-
+    localStorage.setItem("REGISTRO_REPORTES", JSON.stringify(registros));
+    estado("Reporte guardado correctamente. Registros agregados: " + d.length, "ok");
     mostrarVistaPrevia();
-
 }
-
-
-/* =========================================================
-   VISTA PREVIA
-========================================================= */
 
 function mostrarVistaPrevia() {
-
     const d = obtenerRegistros();
+    const t = document.getElementById("previewTable");
 
-    const t =
-        document.getElementById("previewTable");
+    t.querySelector("thead").innerHTML = "<tr>" + HEADERS.map(h => `<th>${h}</th>`).join("") + "</tr>";
+    t.querySelector("tbody").innerHTML = d.map(r => "<tr>" + HEADERS.map(h => `<td>${esc(r[h] || "")}</td>`).join("") + "</tr>").join("");
 
-    t.querySelector("thead").innerHTML =
-        "<tr>" +
-        HEADERS.map(function(h) {
-            return "<th>" + h + "</th>";
-        }).join("") +
-        "</tr>";
-
-    t.querySelector("tbody").innerHTML =
-        d.map(function(r) {
-
-            return (
-                "<tr>" +
-                HEADERS.map(function(h) {
-
-                    return (
-                        "<td>" +
-                        esc(r[h] || "") +
-                        "</td>"
-                    );
-
-                }).join("") +
-                "</tr>"
-            );
-
-        }).join("");
-
-    document.getElementById("previewCard").style.display =
-        "block";
-
-    document
-        .getElementById("previewCard")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
-
+    document.getElementById("previewCard").style.display = "block";
+    document.getElementById("previewCard").scrollIntoView({ behavior: "smooth" });
 }
 
-
-/* =========================================================
-   ENVIAR A GOOGLE SHEETS
-========================================================= */
-
 async function enviarMatriz() {
-
     const registrosEnviar = obtenerRegistros();
 
-    if (
-        !registrosEnviar ||
-        registrosEnviar.length === 0
-    ) {
-
-        alert(
-            "No existen registros para enviar."
-        );
-
+    if (!registrosEnviar || registrosEnviar.length === 0) {
+        alert("No existen registros para enviar.");
         return;
-
     }
 
-    const boton =
-        document.getElementById("btnEnviar");
-
+    const boton = document.getElementById("btnEnviar");
     if (boton) {
-
         boton.disabled = true;
         boton.innerText = "ENVIANDO...";
-
     }
 
     try {
+        const formData = new URLSearchParams();
+        formData.append("rows", JSON.stringify(registrosEnviar));
 
         await fetch(WEB_APP_URL, {
-
             method: "POST",
-
             mode: "no-cors",
-
             headers: {
-                "Content-Type":
-                    "text/plain;charset=utf-8"
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-
-            body: JSON.stringify({
-                rows: registrosEnviar
-            })
-
+            body: formData.toString()
         });
 
-        alert(
-            "✅ INFORMACIÓN ENVIADA CORRECTAMENTE\n\n" +
-            "Los registros fueron enviados a Google Sheets.\n\n" +
-            "Revise la hoja:\n" +
-            "REGISTRO DE REPORTES"
-        );
+        alert("✅ INFORMACIÓN ENVIADA CORRECTAMENTE\n\nLos registros fueron enviados a Google Sheets.\n\nRevise la hoja:\nREGISTRO DE REPORTES");
 
     } catch (error) {
-
-        console.error(
-            "Error al enviar:",
-            error
-        );
-
-        alert(
-            "❌ NO SE PUDO ENVIAR LA INFORMACIÓN\n\n" +
-            "Error: " +
-            error.message
-        );
-
+        console.error("Error al enviar:", error);
+        alert("❌ NO SE PUDO ENVIAR LA INFORMACIÓN\n\nError: " + error.message);
     } finally {
-
         if (boton) {
-
             boton.disabled = false;
             boton.innerText = "ENVIAR";
-
         }
-
     }
-
 }
-
-
-/* =========================================================
-   EXPORTAR CSV
-========================================================= */
 
 function descargarCSV() {
+    const d = registros.length ? registros : obtenerRegistros();
+    let csv = "\ufeff" + HEADERS.join(",") + "\n";
 
-    const d =
-        registros.length
-            ? registros
-            : obtenerRegistros();
-
-    let csv =
-        "\ufeff" +
-        HEADERS.join(",") +
-        "\n";
-
-    d.forEach(function(r) {
-
-        csv +=
-            HEADERS.map(function(h) {
-
-                return (
-                    '"' +
-                    String(r[h] || "")
-                        .replace(/"/g, '""') +
-                    '"'
-                );
-
-            }).join(",") +
-            "\n";
-
+    d.forEach(r => {
+        csv += HEADERS.map(h => `"${String(r[h] || "").replace(/"/g, '""')}"`).join(",") + "\n";
     });
 
-    const a =
-        document.createElement("a");
-
-    const blob =
-        new Blob(
-            [csv],
-            {
-                type:
-                    "text/csv;charset=utf-8"
-            }
-        );
-
-    a.href =
-        window.URL.createObjectURL(blob);
-
-    a.download =
-        "REGISTRO_DE_REPORTES.csv";
-
+    const a = document.createElement("a");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    a.href = window.URL.createObjectURL(blob);
+    a.download = "REGISTRO_DE_REPORTES.csv";
     a.click();
-
 }
-
-
-/* =========================================================
-   LIMPIAR FORMULARIO
-========================================================= */
 
 function limpiarFormulario() {
-
-    document
-        .querySelectorAll("input,textarea")
-        .forEach(function(x) {
-            x.value = "";
-        });
-
-    document
-        .querySelectorAll("select")
-        .forEach(function(x) {
-            x.selectedIndex = 0;
-        });
-
-    document.getElementById("canton").innerHTML =
-        '<option value="">Seleccione primero provincia...</option>';
-
-    document.getElementById("subambito").innerHTML =
-        '<option value="">Seleccione primero un ámbito...</option>';
-
-    document.getElementById("personas").innerHTML =
-        "";
-
-    document.getElementById("previewCard").style.display =
-        "none";
-
-    document.getElementById("status").className =
-        "status";
-
-    document.getElementById("status").textContent =
-        "";
-
+    document.querySelectorAll("input,textarea").forEach(x => x.value = "");
+    document.querySelectorAll("select").forEach(x => x.selectedIndex = 0);
+    document.getElementById("canton").innerHTML = '<option value="">Seleccione primero provincia...</option>';
+    document.getElementById("subambito").innerHTML = '<option value="">Seleccione primero un ámbito...</option>';
+    document.getElementById("personas").innerHTML = "";
+    document.getElementById("previewCard").style.display = "none";
+    document.getElementById("status").className = "status";
+    document.getElementById("status").textContent = "";
 }
-
-
-/* =========================================================
-   MENSAJES DE ESTADO
-========================================================= */
 
 function estado(texto, clase) {
-
-    const x =
-        document.getElementById("status");
-
+    const x = document.getElementById("status");
     x.textContent = texto;
-
-    x.className =
-        "status " + clase;
-
+    x.className = "status " + clase;
 }
 
-
-/* =========================================================
-   ESCAPAR HTML
-========================================================= */
-
 function esc(t) {
-
     return String(t)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
-
 }
-
 </script>
 
 </body>
