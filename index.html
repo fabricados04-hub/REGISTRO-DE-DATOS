@@ -101,9 +101,9 @@ input:focus,select:focus,textarea:focus{
     align-items:center
 }
 
-.person-row{
+.person-row, .detenido-row{
     display:grid;
-    grid-template-columns:2fr 1.2fr 1.5fr auto;
+    grid-template-columns:2fr 1.2fr 1.2fr 1.2fr auto;
     gap:10px;
     align-items:end;
     padding:12px;
@@ -170,7 +170,7 @@ input:focus,select:focus,textarea:focus{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:1900px;
+    min-width:2200px;
     font-size:11px
 }
 
@@ -229,7 +229,7 @@ tr:nth-child(even) td{
         grid-template-columns:1fr
     }
 
-    .person-row{
+    .person-row, .detenido-row{
         grid-template-columns:1fr
     }
 }
@@ -332,6 +332,14 @@ tr:nth-child(even) td{
             <input type="text" id="intervencionOtras" placeholder="Especifique otra intervención..." style="display:none; margin-top:6px;">
         </div>
 
+        <div class="field">
+            <label>DETENIDOS / APREHENDIDOS</label>
+            <select id="detenidos" onchange="evaluarDetenidos()">
+                <option value="NO">NO</option>
+                <option value="SI">SI</option>
+            </select>
+        </div>
+
         <div class="field full">
             <label>NOVEDAD / HECHO PRINCIPAL</label>
             <textarea id="novedad" placeholder="Describa objetivamente el hecho principal..."></textarea>
@@ -344,14 +352,24 @@ tr:nth-child(even) td{
     </div>
 </section>
 
+<!-- SECCIÓN DETENIDOS / APREHENDIDOS (DINÁMICA) -->
+<section class="card" id="cardDetenidos" style="display:none">
+    <div class="people-header">
+        <h2 style="margin:0;border:0;padding:0">Datos de Detenidos / Aprehendidos</h2>
+        <button type="button" class="btn btn-primary" onclick="agregarDetenido()">+ AGREGAR DETENIDO</button>
+    </div>
+    <div id="contenedorDetenidos" style="margin-top:14px;"></div>
+    <div class="note">Ingrese los datos de las personas aprehendidas o detenidas en el procedimiento.</div>
+</section>
+
 <!-- PERSONAS RELACIONADAS -->
 <section class="card">
     <div class="people-header">
-        <h2 style="margin:0;border:0;padding:0">Personas relacionadas</h2>
+        <h2 style="margin:0;border:0;padding:0">Personas relacionadas / Victimas / Fuente de Información</h2>
         <button type="button" class="btn btn-primary" onclick="agregarPersona()">+ AGREGAR PERSONA</button>
     </div>
-    <div id="personas"></div>
-    <div class="note">Puede agregar tantas personas como sean necesarias. Si no existen, deje esta sección vacía.</div>
+    <div id="personas" style="margin-top:14px;"></div>
+    <div class="note">Puede agregar personas implicadas, víctimas o fuentes relativas. Si no existen, deje esta sección vacía.</div>
 </section>
 
 <!-- ACCIONES -->
@@ -430,7 +448,7 @@ const FUENTES = [
 ];
 
 const HEADERS = [
-    "FECHA", "HORA", "PROVINCIA", "CANTÓN", "LUGAR / SECTOR", "COORDENADAS", "ÁMBITO", "TEMA / SUBÁMBITO / FENÓMENO", "REPORTE", "APELLIDOS Y NOMBRES", "CÉDULA / RUC", "CARGO / FUNCIÓN", "NOVEDAD / HECHO PRINCIPAL", "AFECTACIÓN / RESULTADO", "NIVEL DE RELEVANCIA", "FUENTE", "INTERVENCION"
+    "FECHA", "HORA", "PROVINCIA", "CANTÓN", "LUGAR / SECTOR", "COORDENADAS", "ÁMBITO", "TEMA / SUBÁMBITO / FENÓMENO", "REPORTE", "APELLIDOS Y NOMBRES", "CÉDULA / RUC", "CARGO / FUNCIÓN", "NOVEDAD / HECHO PRINCIPAL", "AFECTACIÓN / RESULTADO", "NIVEL DE RELEVANCIA", "FUENTE", "INTERVENCION", "DETENIDOS", "DETENIDO_NOMBRE", "DETENIDO_CEDULA", "DETENIDO_NACIONALIDAD", "DETENIDO_ALIAS"
 ];
 
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyHgKKaVK7Ok1kE7rXZKkaDOBbkDAHsQLcIpZRRyAj9CAJlXQlGmWSj-cI4lDoXhUH4-w/exec";
@@ -472,6 +490,20 @@ function evaluarOtrasIntervencion() {
     } else {
         campoOtras.style.display = "none";
         campoOtras.value = "";
+    }
+}
+
+function evaluarDetenidos() {
+    const sel = document.getElementById("detenidos").value;
+    const card = document.getElementById("cardDetenidos");
+    if (sel === "SI") {
+        card.style.display = "block";
+        if (document.getElementById("contenedorDetenidos").children.length === 0) {
+            agregarDetenido();
+        }
+    } else {
+        card.style.display = "none";
+        document.getElementById("contenedorDetenidos").innerHTML = "";
     }
 }
 
@@ -520,6 +552,31 @@ function agregarPersona() {
     document.getElementById("personas").appendChild(d);
 }
 
+function agregarDetenido() {
+    const d = document.createElement("div");
+    d.className = "detenido-row";
+    d.innerHTML = `
+        <div class="field">
+            <label>NOMBRES Y APELLIDOS</label>
+            <input class="detenido-nombre" placeholder="Nombres completos">
+        </div>
+        <div class="field">
+            <label>CÉDULA / PASAPORTE</label>
+            <input class="detenido-cedula" placeholder="Nro. documento">
+        </div>
+        <div class="field">
+            <label>NACIONALIDAD</label>
+            <input class="detenido-nacionalidad" placeholder="Ej. Ecuatoriana">
+        </div>
+        <div class="field">
+            <label>ALIAS / PSEUDÓNIMO</label>
+            <input class="detenido-alias" placeholder="Alias si lo tuviera">
+        </div>
+        <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">ELIMINAR</button>
+    `;
+    document.getElementById("contenedorDetenidos").appendChild(d);
+}
+
 function datosBase() {
     let valIntervencion = document.getElementById("intervencion").value;
     if (valIntervencion === "OTRAS") {
@@ -541,29 +598,60 @@ function datosBase() {
         "AFECTACIÓN / RESULTADO": document.getElementById("afectacion").value.trim(),
         "NIVEL DE RELEVANCIA": document.getElementById("relevancia").value,
         "FUENTE": document.getElementById("fuente").value,
-        "INTERVENCION": valIntervencion
+        "INTERVENCION": valIntervencion,
+        "DETENIDOS": document.getElementById("detenidos").value
     };
 }
 
 function obtenerRegistros() {
     const b = datosBase();
     const personas = [...document.querySelectorAll(".person-row")];
+    const detenidos = [...document.querySelectorAll(".detenido-row")];
 
-    if (!personas.length) {
-        return [{
-            ...b,
+    let detLista = [];
+    if (b["DETENIDOS"] === "SI" && detenidos.length > 0) {
+        detLista = detenidos.map(x => ({
+            "DETENIDO_NOMBRE": x.querySelector(".detenido-nombre").value.trim(),
+            "DETENIDO_CEDULA": x.querySelector(".detenido-cedula").value.trim(),
+            "DETENIDO_NACIONALIDAD": x.querySelector(".detenido-nacionalidad").value.trim(),
+            "DETENIDO_ALIAS": x.querySelector(".detenido-alias").value.trim()
+        }));
+    } else {
+        detLista = [{
+            "DETENIDO_NOMBRE": "",
+            "DETENIDO_CEDULA": "",
+            "DETENIDO_NACIONALIDAD": "",
+            "DETENIDO_ALIAS": ""
+        }];
+    }
+
+    let perLista = [];
+    if (personas.length > 0) {
+        perLista = personas.map(x => ({
+            "APELLIDOS Y NOMBRES": x.querySelector(".persona-nombre").value.trim(),
+            "CÉDULA / RUC": x.querySelector(".persona-cedula").value.trim(),
+            "CARGO / FUNCIÓN": x.querySelector(".persona-cargo").value.trim()
+        }));
+    } else {
+        perLista = [{
             "APELLIDOS Y NOMBRES": "",
             "CÉDULA / RUC": "",
             "CARGO / FUNCIÓN": ""
         }];
     }
 
-    return personas.map(x => ({
-        ...b,
-        "APELLIDOS Y NOMBRES": x.querySelector(".persona-nombre").value.trim(),
-        "CÉDULA / RUC": x.querySelector(".persona-cedula").value.trim(),
-        "CARGO / FUNCIÓN": x.querySelector(".persona-cargo").value.trim()
-    }));
+    let resultadoFinal = [];
+    perLista.forEach(p => {
+        detLista.forEach(d => {
+            resultadoFinal.push({
+                ...b,
+                ...p,
+                ...d
+            });
+        });
+    });
+
+    return resultadoFinal;
 }
 
 function guardarReporte() {
@@ -644,6 +732,8 @@ function limpiarFormulario() {
     document.querySelectorAll("input,textarea").forEach(x => x.value = "");
     document.querySelectorAll("select").forEach(x => x.selectedIndex = 0);
     document.getElementById("intervencionOtras").style.display = "none";
+    document.getElementById("cardDetenidos").style.display = "none";
+    document.getElementById("contenedorDetenidos").innerHTML = "";
     document.getElementById("canton").innerHTML = '<option value="">Seleccione primero provincia...</option>';
     document.getElementById("subambito").innerHTML = '<option value="">Seleccione primero un ámbito...</option>';
     document.getElementById("personas").innerHTML = "";
