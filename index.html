@@ -170,7 +170,7 @@ input:focus,select:focus,textarea:focus{
 table{
     width:100%;
     border-collapse:collapse;
-    min-width:1700px;
+    min-width:1800px;
     font-size:11px
 }
 
@@ -280,6 +280,16 @@ tr:nth-child(even) td{
         <div class="field">
             <label>LUGAR / SECTOR</label>
             <input id="lugar" placeholder="Lugar o sector">
+        </div>
+
+        <div class="field">
+            <label>REPORTE</label>
+            <select id="reporte">
+                <option value="">Seleccione reporte...</option>
+                <option>Directo</option>
+                <option>Resumen</option>
+                <option>Consolidado</option>
+            </select>
         </div>
 
         <div class="field">
@@ -646,6 +656,7 @@ const HEADERS = [
     "PROVINCIA",
     "CANTÓN",
     "LUGAR / SECTOR",
+    "REPORTE",
     "COORDENADAS",
     "ÁMBITO",
     "TEMA / SUBÁMBITO / FENÓMENO",
@@ -800,6 +811,9 @@ function datosBase() {
 
         "LUGAR / SECTOR":
             document.getElementById("lugar").value.trim(),
+
+        "REPORTE":
+            document.getElementById("reporte").value,
 
         "COORDENADAS":
             document.getElementById("coordenadas").value.trim(),
