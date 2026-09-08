@@ -265,12 +265,16 @@ tr:nth-child(even) td{
 
         <div class="field">
             <label>PROVINCIA</label>
-            <input id="provincia" placeholder="Ej.: Pichincha">
+            <select id="provincia" onchange="actualizarCantones()">
+                <option value="">Seleccione provincia...</option>
+            </select>
         </div>
 
         <div class="field">
             <label>CANTÓN</label>
-            <input id="canton" placeholder="Ej.: Quito">
+            <select id="canton">
+                <option value="">Seleccione primero provincia...</option>
+            </select>
         </div>
 
         <div class="field">
@@ -286,12 +290,7 @@ tr:nth-child(even) td{
         <div class="field">
             <label>ÁMBITO</label>
             <select id="ambito" onchange="actualizarSubambitos()">
-                <option value="">Seleccione...</option>
-                <option>Gobernabilidad y democracia</option>
-                <option>Justicia social y desarrollo humano</option>
-                <option>Relaciones internacionales y defensa</option>
-                <option>Sectores estratégicos</option>
-                <option>Justicia y seguridad ciudadana</option>
+                <option value="">Seleccione ámbito...</option>
             </select>
         </div>
 
@@ -303,27 +302,19 @@ tr:nth-child(even) td{
         </div>
 
         <div class="field">
-            <label>TIPO DE EVENTO</label>
-            <input id="tipoEvento" placeholder="Ej.: Movilización, reunión, operativo">
-        </div>
-
-        <div class="field">
-            <label>CAUSA / MOTIVO</label>
-            <input id="causa" placeholder="Motivo principal">
-        </div>
-
-        <div class="field">
-            <label>ACTOR / ORGANIZACIÓN</label>
-            <input id="actor" placeholder="Persona, grupo u organización">
-        </div>
-
-        <div class="field">
             <label>NIVEL DE RELEVANCIA</label>
             <select id="relevancia">
                 <option value="">Seleccione...</option>
                 <option>Alta</option>
                 <option>Media</option>
                 <option>Baja</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>FUENTE</label>
+            <select id="fuente">
+                <option value="">Seleccione fuente...</option>
             </select>
         </div>
 
@@ -341,14 +332,6 @@ tr:nth-child(even) td{
                 id="afectacion"
                 placeholder="Indique afectaciones, resultados o situación actual..."
             ></textarea>
-        </div>
-
-        <div class="field full">
-            <label>FUENTE</label>
-            <input
-                id="fuente"
-                placeholder="Ej.: Noticia, reporte, fuente abierta, verificación"
-            >
         </div>
 
     </div>
@@ -472,69 +455,185 @@ tr:nth-child(even) td{
 <script>
 
 /* =========================================================
+   CANTONES POR PROVINCIA
+========================================================= */
+
+const CANTONES = {
+    "AZUAY": ["CUENCA", "CAMILO PONCE ENRÍQUEZ", "CHORDELEG", "EL PAN", "GIRÓN", "GUACHAPALA", "GUALACEO", "NABÓN", "OÑA", "PAUTE", "PUCARÁ", "SAN FERNANDO", "SANTA ISABEL", "SEVILLA DE ORO", "SÍGSIG"],
+    "BOLÍVAR": ["GUARANDA", "CHILLANES", "CHIMBO", "ECHEANDÍA", "LAS NAVES", "SAN MIGUEL", "CALUMA"],
+    "CAÑAR": ["AZOGUES", "BIBLIÁN", "CAÑAR", "DÉLEG", "EL TAMBO", "LA TRONCAL", "SUSCAL"],
+    "CARCHI": ["TULCÁN", "BOLÍVAR", "ESPEJO", "MIRA", "MONTÚFAR", "SAN PEDRO DE HUACA"],
+    "CHIMBORAZO": ["RIOBAMBA", "ALAUSÍ", "CHAMBO", "CHUNCHI", "COLTA", "CUMANDÁ", "GUAMOTE", "GUANO", "PALLATANGA", "PENIPE"],
+    "COTOPAXI": ["LATACUNGA", "LA MANÁ", "PANGUA", "PUJILÍ", "SALCEDO", "SAQUISILÍ", "SIGCHOS"],
+    "EL ORO": ["MACHALA", "ARENILLAS", "ATAHUALPA", "BALSAS", "CHILLA", "EL GUABO", "HUAQUILLAS", "LAS LAJAS", "MARCABELÍ", "PASAJE", "PIÑAS", "PORTOVELO", "SANTA ROSA", "ZARUMA"],
+    "ESMERALDAS": ["ESMERALDAS", "ATACAMES", "ELOY ALFARO", "MUISNE", "QUININDÉ", "RIOVERDE", "SAN LORENZO"],
+    "GALÁPAGOS": ["SAN CRISTÓBAL", "ISABELA", "SANTA CRUZ"],
+    "GUAYAS": ["GUAYAQUIL", "ALFREDO BAQUERIZO MORENO", "BALAO", "BALZAR", "COLIMES", "CORONEL MARCELINO MARIDUEÑA", "DAULE", "DURÁN", "EL EMPALME", "EL TRIUNFO", "GENERAL ANTONIO ELIZALDE", "ISIDRO AYORA", "LOMAS DE SARGENTILLO", "MILAGRO", "NARANJAL", "NARANJITO", "NOBOL", "PALESTINA", "PEDRO CARBO", "PLAYAS", "SALITRE", "SAMBORONDÓN", "SANTA LUCÍA", "SIMÓN BOLÍVAR", "YAGUACHI"],
+    "IMBABURA": ["IBARRA", "ANTONIO ANTE", "COTACACHI", "OTAVALO", "PIMAMPIRO", "SAN MIGUEL DE URCUQUÍ"],
+    "LOJA": ["LOJA", "CALVAS", "CATAMAYO", "CELICA", "CHAGUARPAMBA", "ESPÍNDOLA", "GONZANAMÁ", "MACARÁ", "OLMEDO", "PALTAS", "PINDAL", "PUYANGO", "QUILANGA", "SARAGURO", "SOZORANGA", "ZAPOTILLO"],
+    "LOS RÍOS": ["BABAHOYO", "BABA", "BUENA FE", "MOCACHE", "MONTALVO", "PALENQUE", "PUEBLOVIEJO", "QUEVEDO", "QUINSALOMA", "URDANETA", "VALENCIA", "VENTANAS", "VINCES"],
+    "MANABÍ": ["PORTOVIEJO", "24 DE MAYO", "BOLÍVAR", "CHONE", "EL CARMEN", "FLAVIO ALFARO", "JAMA", "JARAMIJÓ", "JIPIJAPA", "JUNÍN", "MANTA", "MONTECRISTI", "OLMEDO", "PAJÁN", "PEDERNALES", "PICHINCHA", "PUERTO LÓPEZ", "ROCAFUERTE", "SAN VICENTE", "SANTA ANA", "SUCRE", "TOSAGUA"],
+    "MORONA SANTIAGO": ["MORONA", "GUALAQUIZA", "HUAMBOYA", "LIMÓN INDANZA", "LOGROÑO", "PALORA", "PABLO SEXTO", "SAN JUAN BOSCO", "SANTIAGO", "SUCÚA", "TAISHA", "TIWINTZA"],
+    "NAPO": ["TENA", "ARCHIDONA", "CARLOS JULIO AROSEMENA TOLA", "EL CHACO", "QUIJOS"],
+    "PASTAZA": ["PASTAZA", "ARAJUNO", "MERA", "SANTA CLARA"],
+    "PICHINCHA": ["QUITO", "CAYAMBE", "MEJÍA", "PEDRO MONCAYO", "PEDRO VICENTE MALDONADO", "PUERTO QUITO", "RUMIÑAHUI", "SAN MIGUEL DE LOS BANCOS"],
+    "SANTA ELENA": ["SANTA ELENA", "LA LIBERTAD", "SALINAS"],
+    "SANTO DOMINGO DE LOS TSÁCHILAS": ["SANTO DOMINGO", "LA CONCORDIA"],
+    "SUCUMBÍOS": ["LAGO AGRIO", "CASCALES", "CUYABENO", "GONZALO PIZARRO", "PUTUMAYO", "SHUSHUFINDI", "SUCUMBÍOS"],
+    "TUNGURAHUA": ["AMBATO", "BAÑOS DE AGUA SANTA", "CEVALLOS", "MOCHA", "PATATE", "QUERO", "SAN PEDRO DE PELILEO", "SANTIAGO DE PÍLLARO", "TISALEO"],
+    "ZAMORA CHINCHIPE": ["ZAMORA", "CENTINELA DEL CÓNDOR", "CHINCHIPE", "EL PANGUI", "NANGARITZA", "PALANDA", "PAQUISHA", "YACUAMBI", "YANTZAZA"],
+    "ORELLANA": ["FRANCISCO DE ORELLANA", "AGUARICO", "LA JOYA DE LOS SACHAS", "LORETO"]
+};
+
+
+/* =========================================================
    SUBÁMBITOS
 ========================================================= */
 
 const SUBAMBITOS = {
-
-    "Gobernabilidad y democracia": [
-        "Crisis institucionales",
-        "Procesos electorales",
-        "Conflictos político-institucionales",
-        "Movilizaciones de alcance nacional",
-        "Amenazas contra instituciones",
-        "Gobernabilidad"
+    "1. GOBERNABILIDAD E INSTITUCIONALIDAD DEL ESTADO": [
+        "CRISIS INSTITUCIONALES",
+        "PROCESOS ELECTORALES",
+        "CONFLICTOS POLÍTICO-INSTITUCIONALES",
+        "AMENAZAS CONTRA INSTITUCIONES DEL ESTADO",
+        "AFECTACIONES A LA GOBERNABILIDAD",
+        "FUNCIONAMIENTO DE ENTIDADES PÚBLICAS"
     ],
-
-    "Justicia social y desarrollo humano": [
-        "Frente indígena",
-        "Organizaciones laborales",
-        "Sector estudiantil",
-        "Organizaciones sociales",
-        "Conflictos comunitarios",
-        "Huelgas",
-        "Paralizaciones",
-        "Movilizaciones",
-        "Conflictos socioambientales"
+    "2. CONFLICTIVIDAD SOCIAL Y MOVILIZACIÓN": [
+        "MOVILIZACIONES",
+        "MANIFESTACIONES",
+        "HUELGAS Y PARALIZACIONES",
+        "CONFLICTOS COMUNITARIOS",
+        "CONFLICTOS SOCIOAMBIENTALES",
+        "ORGANIZACIONES SOCIALES",
+        "ORGANIZACIONES LABORALES",
+        "SECTOR ESTUDIANTIL",
+        "ORGANIZACIONES INDÍGENAS"
     ],
-
-    "Relaciones internacionales y defensa": [
-        "Geopolítica",
-        "Relaciones entre Estados",
-        "Conflictos internacionales",
-        "Frontera",
-        "Crimen transnacional",
-        "Narcotráfico transfronterizo",
-        "Tráfico de armas",
-        "Cooperación internacional"
+    "3. ENTORNO INTERNACIONAL Y FRONTERIZO": [
+        "GEOPOLÍTICA",
+        "RELACIONES ENTRE ESTADOS",
+        "CONFLICTOS INTERNACIONALES",
+        "SEGURIDAD FRONTERIZA",
+        "CRIMEN TRANSNACIONAL",
+        "NARCOTRÁFICO TRANSFRONTERIZO",
+        "TRÁFICO TRANSFRONTERIZO DE ARMAS",
+        "COOPERACIÓN INTERNACIONAL"
     ],
-
-    "Sectores estratégicos": [
-        "Minería",
-        "Minería ilegal",
-        "Proyectos mineros",
-        "Hidrocarburos",
-        "Energía eléctrica",
-        "Telecomunicaciones",
-        "Infraestructura crítica",
-        "Agua",
-        "Otros sectores estratégicos"
+    "4. SECTORES ESTRATÉGICOS E INFRAESTRUCTURA CRÍTICA": [
+        "MINERÍA",
+        "MINERÍA ILEGAL",
+        "PROYECTOS MINEROS",
+        "HIDROCARBUROS",
+        "ENERGÍA ELÉCTRICA",
+        "TELECOMUNICACIONES",
+        "AGUA",
+        "INFRAESTRUCTURA CRÍTICA",
+        "OTROS SECTORES ESTRATÉGICOS"
     ],
-
-    "Justicia y seguridad ciudadana": [
-        "Crimen organizado",
-        "Narcotráfico",
-        "Homicidio",
-        "Secuestro",
-        "Extorsión",
-        "Tráfico de armas",
-        "Trata de personas",
-        "Terrorismo",
-        "Violencia criminal",
-        "Delincuencia común"
+    "5. CRIMINALIDAD Y DELINCUENCIA ORGANIZADA": [
+        "CRIMEN ORGANIZADO",
+        "NARCOTRÁFICO",
+        "HOMICIDIO",
+        "SECUESTRO",
+        "EXTORSIÓN",
+        "TRÁFICO DE ARMAS",
+        "TRATA DE PERSONAS",
+        "TERRORISMO",
+        "DELINCUENCIA COMÚN",
+        "VIOLENCIA CRIMINAL"
+    ],
+    "6. CENTROS DE PRIVACIÓN DE LIBERTAD": [
+        "OPERATIVOS EN C.P.L.",
+        "MONITOREO DE C.P.L.",
+        "DECOMISO DE OBJETOS PROHIBIDOS",
+        "INGRESO DE PPL",
+        "SALIDA DE PPL",
+        "REUBICACIÓN DE PPL",
+        "FALLECIMIENTO DE PPL",
+        "PERSONAS HERIDAS EN C.P.L.",
+        "DELITOS COMETIDOS EN C.P.L.",
+        "OPERACIÓN ATLAS",
+        "OTRAS ACTIVIDADES EN C.P.L."
+    ],
+    "7. ACTIVIDAD JUDICIAL Y CUMPLIMIENTO DE DISPOSICIONES": [
+        "INSTALACIÓN DE AUDIENCIAS",
+        "DILIGENCIAS JUDICIALES CON PPL",
+        "CUMPLIMIENTO DE BOLETAS",
+        "DISPOSICIONES JUDICIALES",
+        "TRASLADOS PARA DILIGENCIAS JUDICIALES"
+    ],
+    "8. SEGURIDAD Y OPERACIONES POLICIALES": [
+        "OPERATIVOS POLICIALES",
+        "LEVANTAMIENTO DE INFORMACIÓN",
+        "RECONSTRUCCIÓN DE LOS HECHOS",
+        "VERIFICACIÓN DE PERSONAS Y OBJETOS EN ACTITUD INUSUAL",
+        "INCAUTACIÓN DE ARMAS DE FUEGO Y MUNICIONES"
+    ],
+    "9. INCIDENTES, EMERGENCIAS Y AFECTACIONES A PERSONAS": [
+        "PERSONAS FALLECIDAS",
+        "PERSONAS HERIDAS",
+        "PERSONAS DESAPARECIDAS",
+        "INCENDIOS",
+        "ACCIDENTES",
+        "EMERGENCIAS",
+        "OTROS INCIDENTES RELEVANTES"
+    ],
+    "10. EVENTOS Y CONCENTRACIONES DE PERSONAS": [
+        "ENCUENTROS DEPORTIVOS",
+        "EVENTOS MASIVOS",
+        "CONCENTRACIONES PÚBLICAS",
+        "ACTIVIDADES PÚBLICAS",
+        "EVENTOS DE RELEVANCIA"
+    ],
+    "11. SERVIDORES POLICIALES E INSTITUCIONALIDAD POLICIAL": [
+        "NOVEDADES CON SERVIDORES POLICIALES",
+        "EVALUACIONES FÍSICAS DE SERVIDORES POLICIALES",
+        "ACCIDENTES DE SERVIDORES POLICIALES",
+        "NOVEDADES EN INSTALACIONES POLICIALES",
+        "ACTIVIDADES INSTITUCIONALES"
     ]
-
 };
+
+
+/* =========================================================
+   FUENTES
+========================================================= */
+
+const FUENTES = [
+    "SZI-CARCHI",
+    "SZI-SUCUMBIOS",
+    "SZI-IMBABURA",
+    "SZI-ESMERALDAS",
+    "SZI-NAPO",
+    "SZI-ORELLANA",
+    "SZI-PICHINCHA",
+    "SZI-TUNGURAHUA",
+    "SZI-PASTAZA",
+    "SZI-COTOPAXI",
+    "SZI-CHIMBORAZO",
+    "SZI-MANABI-PORTOVIEJO",
+    "SZI-MANABI-MANTA",
+    "SZI-SANTO DOMINGO",
+    "SZI-BOLIVAR",
+    "SZI-LOS RIOS BABAHOYO",
+    "SZI-LOS RIOS QUEVEDO",
+    "SZI-SANTA ELENA",
+    "SZI-GALAPAGOS",
+    "SZI-GUAYAS-MILAGRO",
+    "SZI-AZUAY",
+    "SZI-CAÑAR",
+    "SZI-MORONA SANTIAGO",
+    "SZI-EL ORO",
+    "SZI-LOJA",
+    "SZI-ZAMORA CHINCHIPE",
+    "SZI-ZONA 9",
+    "SZI-ZONA 8",
+    "UNIP",
+    "UNIT",
+    "UNISOP",
+    "UNIAM"
+];
 
 
 /* =========================================================
@@ -550,9 +649,6 @@ const HEADERS = [
     "COORDENADAS",
     "ÁMBITO",
     "TEMA / SUBÁMBITO / FENÓMENO",
-    "TIPO DE EVENTO",
-    "CAUSA / MOTIVO",
-    "ACTOR / ORGANIZACIÓN",
     "APELLIDOS Y NOMBRES",
     "CÉDULA / RUC",
     "CARGO / FUNCIÓN",
@@ -581,31 +677,69 @@ let registros = JSON.parse(
 
 
 /* =========================================================
+   INICIALIZACIÓN DE DESPLEGABLES
+========================================================= */
+
+window.onload = function() {
+    const provSelect = document.getElementById("provincia");
+    Object.keys(CANTONES).forEach(function(prov) {
+        const o = document.createElement("option");
+        o.value = prov;
+        o.textContent = prov;
+        provSelect.appendChild(o);
+    });
+
+    const ambSelect = document.getElementById("ambito");
+    Object.keys(SUBAMBITOS).forEach(function(amb) {
+        const o = document.createElement("option");
+        o.value = amb;
+        o.textContent = amb;
+        ambSelect.appendChild(o);
+    });
+
+    const fueSelect = document.getElementById("fuente");
+    FUENTES.forEach(function(f) {
+        const o = document.createElement("option");
+        o.value = f;
+        o.textContent = f;
+        fueSelect.appendChild(o);
+    });
+};
+
+
+/* =========================================================
+   ACTUALIZAR CANTONES
+========================================================= */
+
+function actualizarCantones() {
+    const prov = document.getElementById("provincia").value;
+    const c = document.getElementById("canton");
+    c.innerHTML = '<option value="">Seleccione cantón...</option>';
+
+    (CANTONES[prov] || []).forEach(function(x) {
+        const o = document.createElement("option");
+        o.value = x;
+        o.textContent = x;
+        c.appendChild(o);
+    });
+}
+
+
+/* =========================================================
    ACTUALIZAR SUBÁMBITOS
 ========================================================= */
 
 function actualizarSubambitos() {
-
-    const ambito =
-        document.getElementById("ambito").value;
-
-    const s =
-        document.getElementById("subambito");
-
-    s.innerHTML =
-        '<option value="">Seleccione...</option>';
+    const ambito = document.getElementById("ambito").value;
+    const s = document.getElementById("subambito");
+    s.innerHTML = '<option value="">Seleccione subámbito...</option>';
 
     (SUBAMBITOS[ambito] || []).forEach(function(x) {
-
         const o = document.createElement("option");
-
         o.value = x;
         o.textContent = x;
-
         s.appendChild(o);
-
     });
-
 }
 
 
@@ -659,10 +793,10 @@ function datosBase() {
             document.getElementById("hora").value,
 
         "PROVINCIA":
-            document.getElementById("provincia").value.trim(),
+            document.getElementById("provincia").value,
 
         "CANTÓN":
-            document.getElementById("canton").value.trim(),
+            document.getElementById("canton").value,
 
         "LUGAR / SECTOR":
             document.getElementById("lugar").value.trim(),
@@ -676,15 +810,6 @@ function datosBase() {
         "TEMA / SUBÁMBITO / FENÓMENO":
             document.getElementById("subambito").value,
 
-        "TIPO DE EVENTO":
-            document.getElementById("tipoEvento").value.trim(),
-
-        "CAUSA / MOTIVO":
-            document.getElementById("causa").value.trim(),
-
-        "ACTOR / ORGANIZACIÓN":
-            document.getElementById("actor").value.trim(),
-
         "NOVEDAD / HECHO PRINCIPAL":
             document.getElementById("novedad").value.trim(),
 
@@ -695,7 +820,7 @@ function datosBase() {
             document.getElementById("relevancia").value,
 
         "FUENTE":
-            document.getElementById("fuente").value.trim()
+            document.getElementById("fuente").value
 
     };
 
@@ -714,8 +839,6 @@ function obtenerRegistros() {
         ...document.querySelectorAll(".person-row")
     ];
 
-    /* Si no hay personas */
-
     if (!personas.length) {
 
         return [
@@ -728,8 +851,6 @@ function obtenerRegistros() {
         ];
 
     }
-
-    /* Si hay personas */
 
     return personas.map(function(x) {
 
@@ -877,12 +998,6 @@ async function enviarMatriz() {
 
         });
 
-        /*
-         * Con mode:no-cors el navegador no puede leer
-         * la respuesta del Apps Script, pero la petición
-         * sí puede ser enviada.
-         */
-
         alert(
             "✅ INFORMACIÓN ENVIADA CORRECTAMENTE\n\n" +
             "Los registros fueron enviados a Google Sheets.\n\n" +
@@ -990,6 +1105,9 @@ function limpiarFormulario() {
         .forEach(function(x) {
             x.selectedIndex = 0;
         });
+
+    document.getElementById("canton").innerHTML =
+        '<option value="">Seleccione primero provincia...</option>';
 
     document.getElementById("subambito").innerHTML =
         '<option value="">Seleccione primero un ámbito...</option>';
