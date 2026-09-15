@@ -333,7 +333,7 @@ tr:nth-child(even) td{
         </div>
 
         <div class="field">
-            <label>DETENIDOS / APREHENDIDOS</label>
+            <label>REGISTRO DE PERSONAS</label>
             <select id="detenidos" onchange="evaluarDetenidos()">
                 <option value="NO">NO</option>
                 <option value="SI">SI</option>
@@ -352,10 +352,10 @@ tr:nth-child(even) td{
     </div>
 </section>
 
-<!-- SECCIÓN DETENIDOS / APREHENDIDOS (DINÁMICA) -->
+<!-- SECCIÓN REGISTRO DE PERSONAS (DINÁMICA) -->
 <section class="card" id="cardDetenidos" style="display:none">
     <div class="people-header">
-        <h2 style="margin:0;border:0;padding:0">Datos de Detenidos / Aprehendidos</h2>
+        <h2 style="margin:0;border:0;padding:0">Datos de REGISTRO DE PERSONAS</h2>
         <button type="button" class="btn btn-primary" onclick="agregarDetenido()">+ AGREGAR DETENIDO</button>
     </div>
     <div id="contenedorDetenidos" style="margin-top:14px;"></div>
@@ -531,6 +531,18 @@ function actualizarSubambitos() {
     });
 }
 
+function evaluarAliasOtras(element) {
+    const row = element.closest('.detenido-row');
+    const inputManual = row.querySelector('.detenido-alias-manual');
+    if (element.value === "OTRAS") {
+        inputManual.style.display = "block";
+        inputManual.focus();
+    } else {
+        inputManual.style.display = "none";
+        inputManual.value = "";
+    }
+}
+
 function agregarPersona() {
     const d = document.createElement("div");
     d.className = "person-row";
@@ -569,8 +581,17 @@ function agregarDetenido() {
             <input class="detenido-nacionalidad" placeholder="Ej. Ecuatoriana">
         </div>
         <div class="field">
-            <label>ALIAS / PSEUDÓNIMO</label>
-            <input class="detenido-alias" placeholder="Alias si lo tuviera">
+            <label>CALIDAD DE ACTUACIÓN</label>
+            <select class="detenido-alias-select" onchange="evaluarAliasOtras(this)">
+                <option value="">Seleccione...</option>
+                <option value="DETENIDO">DETENIDO</option>
+                <option value="APREHENDIDO">APREHENDIDO</option>
+                <option value="FALLECIDO">FALLECIDO</option>
+                <option value="HERIDO">HERIDO</option>
+                <option value="PPL">PPL</option>
+                <option value="OTRAS">OTRAS</option>
+            </select>
+            <input class="detenido-alias-manual" placeholder="Especifique..." style="display:none; margin-top:6px;">
         </div>
         <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">ELIMINAR</button>
     `;
@@ -610,12 +631,20 @@ function obtenerRegistros() {
 
     let detLista = [];
     if (b["DETENIDOS"] === "SI" && detenidos.length > 0) {
-        detLista = detenidos.map(x => ({
-            "DETENIDO_NOMBRE": x.querySelector(".detenido-nombre").value.trim(),
-            "DETENIDO_CEDULA": x.querySelector(".detenido-cedula").value.trim(),
-            "DETENIDO_NACIONALIDAD": x.querySelector(".detenido-nacionalidad").value.trim(),
-            "DETENIDO_ALIAS": x.querySelector(".detenido-alias").value.trim()
-        }));
+        detLista = detenidos.map(x => {
+            const selAlias = x.querySelector(".detenido-alias-select").value;
+            const txtManual = x.querySelector(".detenido-alias-manual").value.trim();
+            let aliasFinal = selAlias;
+            if (selAlias === "OTRAS") {
+                aliasFinal = txtManual;
+            }
+            return {
+                "DETENIDO_NOMBRE": x.querySelector(".detenido-nombre").value.trim(),
+                "DETENIDO_CEDULA": x.querySelector(".detenido-cedula").value.trim(),
+                "DETENIDO_NACIONALIDAD": x.querySelector(".detenido-nacionalidad").value.trim(),
+                "DETENIDO_ALIAS": aliasFinal
+            };
+        });
     } else {
         detLista = [{
             "DETENIDO_NOMBRE": "",
