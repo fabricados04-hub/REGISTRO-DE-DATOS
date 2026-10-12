@@ -1,791 +1,1422 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>REGISTRO DE REPORTES</title>
 
+
+
 <style>
-*{box-sizing:border-box}
+
+\*{box-sizing:border-box}
+
+
 
 body{
+
     margin:0;
+
     font-family:Arial,sans-serif;
+
     background:#f3f5f7;
+
     color:#1f2937
+
 }
+
+
 
 header{
+
     background:#17365d;
+
     color:#fff;
+
     padding:22px;
+
     text-align:center
+
 }
+
+
 
 header h1{
+
     margin:0;
+
     font-size:28px
+
 }
+
+
 
 header p{
+
     margin:7px 0 0;
+
     font-size:13px
+
 }
+
+
 
 .container{
+
     max-width:1500px;
+
     margin:24px auto;
+
     padding:0 18px
+
 }
+
+
 
 .card{
+
     background:#fff;
+
     border-radius:10px;
+
     padding:22px;
+
     margin-bottom:20px;
+
     box-shadow:0 2px 10px #00000012
+
 }
+
+
 
 h2{
+
     margin:0 0 18px;
+
     color:#17365d;
+
     font-size:18px;
+
     border-bottom:2px solid #e5e7eb;
+
     padding-bottom:10px
+
 }
+
+
 
 .grid{
+
     display:grid;
+
     grid-template-columns:repeat(4,1fr);
+
     gap:14px
+
 }
+
+
 
 .field{
+
     display:flex;
+
     flex-direction:column
+
 }
+
+
 
 .full{
+
     grid-column:1/-1
+
 }
+
+
 
 label{
+
     font-size:12px;
+
     font-weight:bold;
+
     margin-bottom:6px;
+
     color:#374151
+
 }
+
+
 
 input,select,textarea{
+
     width:100%;
+
     border:1px solid #cbd5e1;
+
     border-radius:6px;
+
     padding:10px;
+
     font-size:13px;
+
     background:#fff
+
 }
+
+
 
 textarea{
+
     min-height:80px;
+
     resize:vertical
+
 }
+
+
 
 input:focus,select:focus,textarea:focus{
+
     outline:none;
+
     border-color:#17365d
+
 }
+
+
 
 .people-header{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center
+
 }
+
+
 
 .person-row, .detenido-row{
+
     display:grid;
+
     grid-template-columns:2fr 1.2fr 1.2fr 1.2fr auto;
+
     gap:10px;
+
     align-items:end;
+
     padding:12px;
+
     background:#f8fafc;
+
     border:1px solid #e2e8f0;
+
     border-radius:7px;
+
     margin-bottom:9px
+
 }
 
+
+
+.indicio-item{border:1px solid #dbe2ea;border-radius:7px;padding:10px;background:#f8fafc;display:flex;flex-direction:column;gap:8px}.indicio-item .indicio-titulo{font-size:13px;font-weight:bold}.indicio-cantidad{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .btn{
+
     border:0;
+
     border-radius:6px;
+
     padding:10px 16px;
+
     cursor:pointer;
+
     font-weight:bold;
+
     font-size:13px
+
 }
+
+
 
 .btn-primary{
+
     background:#17365d;
+
     color:#fff
+
 }
+
+
 
 .btn-success{
+
     background:#15803d;
+
     color:#fff
+
 }
+
+
 
 .btn-danger{
+
     background:#b91c1c;
+
     color:#fff
+
 }
+
+
 
 .btn-secondary{
+
     background:#64748b;
+
     color:#fff
+
 }
+
+
 
 .btn-warning{
+
     background:#b45309;
+
     color:#fff
+
 }
+
+
 
 .btn:hover{
+
     filter:brightness(.93)
+
 }
+
+
 
 .btn:disabled{
+
     opacity:.6;
+
     cursor:not-allowed
+
 }
+
+
 
 .actions{
+
     display:flex;
+
     gap:10px;
+
     flex-wrap:wrap;
+
     margin-top:18px
+
 }
+
+
 
 .preview-wrap{
+
     overflow-x:auto
+
 }
+
+
 
 table{
+
     width:100%;
+
     border-collapse:collapse;
+
     min-width:2200px;
+
     font-size:11px
+
 }
+
+
 
 th{
+
     background:#17365d;
+
     color:#fff;
+
     padding:9px 7px;
+
     text-align:left;
+
     white-space:nowrap
+
 }
+
+
 
 td{
+
     border:1px solid #dbe2ea;
+
     padding:8px 7px;
+
     vertical-align:top
+
 }
+
+
 
 tr:nth-child(even) td{
+
     background:#f8fafc
+
 }
+
+
 
 .status{
+
     margin-top:12px;
+
     padding:10px;
+
     border-radius:6px;
+
     display:none;
+
     font-size:13px
+
 }
+
+
 
 .status.ok{
+
     display:block;
+
     background:#dcfce7;
+
     color:#166534
+
 }
+
+
 
 .status.error{
+
     display:block;
+
     background:#fee2e2;
+
     color:#991b1b
+
 }
+
+
 
 .note{
+
     font-size:12px;
+
     color:#64748b;
+
     margin-top:8px
+
 }
+
+
 
 @media(max-width:1100px){
+
     .grid{
+
         grid-template-columns:repeat(2,1fr)
+
     }
+
 }
+
+
 
 @media(max-width:650px){
+
     .grid{
+
         grid-template-columns:1fr
+
     }
 
+
+
     .person-row, .detenido-row{
+
         grid-template-columns:1fr
+
     }
+
 }
+
 </style>
+
 </head>
+
+
 
 <body>
 
+
+
 <header>
+
     <h1>REGISTRO DE REPORTES</h1>
+
     <p>Sistema de registro y consolidación de información</p>
+
 </header>
+
+
 
 <div class="container">
 
+
+
 <!-- INFORMACIÓN DEL REPORTE -->
+
 <section class="card">
+
     <h2>Información del reporte</h2>
+
     <div class="grid">
+
         <div class="field">
+
             <label>FECHA</label>
+
             <input type="date" id="fecha">
+
         </div>
 
+
+
         <div class="field">
+
             <label>HORA</label>
+
             <input type="time" id="hora">
+
         </div>
 
+
+
         <div class="field">
+
             <label>PROVINCIA</label>
+
             <select id="provincia" onchange="actualizarCantones()">
+
                 <option value="">Seleccione provincia...</option>
+
             </select>
+
         </div>
 
+
+
         <div class="field">
+
             <label>CANTÓN</label>
+
             <select id="canton">
+
                 <option value="">Seleccione primero provincia...</option>
+
             </select>
+
         </div>
 
+
+
         <div class="field">
+
             <label>LUGAR / SECTOR</label>
+
             <input type="text" id="lugar" placeholder="Lugar o sector">
+
         </div>
 
+
+
         <div class="field">
+
             <label>COORDENADAS</label>
+
             <input type="text" id="coordenadas" placeholder="LATITUD, LONGITUD">
+
         </div>
 
+
+
         <div class="field">
+
             <label>ÁMBITO</label>
+
             <select id="ambito" onchange="actualizarSubambitos()">
+
                 <option value="">Seleccione ámbito...</option>
+
             </select>
+
         </div>
 
+
+
         <div class="field">
+
             <label>TEMA / SUBÁMBITO / FENÓMENO</label>
+
             <select id="subambito">
+
                 <option value="">Seleccione primero un ámbito...</option>
+
             </select>
+
         </div>
 
+
+
         <div class="field">
+
             <label>REPORTE</label>
+
             <input type="text" id="reporte" placeholder="Escriba el tipo de reporte...">
+
         </div>
 
+
+
         <div class="field">
+
             <label>NIVEL DE RELEVANCIA</label>
+
             <select id="relevancia">
+
                 <option value="">Seleccione...</option>
+
                 <option>Alta</option>
+
                 <option>Media</option>
+
                 <option>Baja</option>
+
             </select>
+
         </div>
 
+
+
         <div class="field">
+
             <label>FUENTE</label>
+
             <select id="fuente">
+
                 <option value="">Seleccione fuente...</option>
+
             </select>
+
         </div>
 
+
+
         <div class="field">
+
             <label>INTERVENCIÓN</label>
+
             <select id="intervencion" onchange="evaluarOtrasIntervencion()">
+
                 <option value="">Seleccione intervención...</option>
+
                 <option value="INTELIGENCIA-PREVENTIVO">INTELIGENCIA-PREVENTIVO</option>
+
                 <option value="INTELIGENCIA - INVESTIGATIVO">INTELIGENCIA-INVESTIGATIVO</option>
+
                 <option value="INTELIGENCIA">INTELIGENCIA</option>
+
                  <option value="UCP-UNIDAD DE CONTINGENCIA PENITENCIARIA">UCP-UNIDAD DE CONTINGENCIA PENITENCIARIA</option>
+
                 <option value="POLICIA NACIONAL-FUERZAS ARMADAS">POLICIA NACIONAL-FUERZAS ARMADAS</option>
+
                 <option value="OTRAS">OTRAS</option>
+
             </select>
+
             <input type="text" id="intervencionOtras" placeholder="Especifique otra intervención..." style="display:none; margin-top:6px;">
+
         </div>
+
+
 
         <div class="field">
+
             <label>REGISTRO DE PERSONAS</label>
+
             <select id="detenidos" onchange="evaluarDetenidos()">
+
                 <option value="NO">NO</option>
+
                 <option value="SI">SI</option>
+
             </select>
+
         </div>
 
+
+
         <div class="field full">
+
             <label>NOVEDAD / HECHO PRINCIPAL</label>
+
             <textarea id="novedad" placeholder="Describa objetivamente el hecho principal..."></textarea>
+
         </div>
 
+
+
         <div class="field full">
+
             <label>AFECTACIÓN / RESULTADO</label>
+
             <textarea id="afectacion" placeholder="Indique afectaciones, resultados o situación actual..."></textarea>
+
         </div>
+
     </div>
+
 </section>
+
+
 
 <!-- SECCIÓN REGISTRO DE PERSONAS (DINÁMICA) -->
+
 <section class="card" id="cardDetenidos" style="display:none">
+
     <div class="people-header">
+
         <h2 style="margin:0;border:0;padding:0">Datos de REGISTRO DE PERSONAS</h2>
-        <button type="button" class="btn btn-primary" onclick="agregarDetenido()">+ AGREGAR DETENIDO</button>
+
+        <button type="button" class="btn btn-primary" onclick="agregarDetenido()">+ AGREGAR INFORMACIÓN</button>
+
     </div>
+
     <div id="contenedorDetenidos" style="margin-top:14px;"></div>
+
     <div class="note">Ingrese los datos de las personas aprehendidas o detenidas en el procedimiento.</div>
+
 </section>
 
-<!-- PERSONAS RELACIONADAS -->
+
+
+<!-- INDICIOS RELACIONADOS AL HECHO -->
 <section class="card">
-    <div class="people-header">
-        <h2 style="margin:0;border:0;padding:0">Personas relacionadas / Victimas / Fuente de Información</h2>
-        <button type="button" class="btn btn-primary" onclick="agregarPersona()">+ AGREGAR PERSONA</button>
-    </div>
-    <div id="personas" style="margin-top:14px;"></div>
-    <div class="note">Puede agregar personas implicadas, víctimas o fuentes relativas. Si no existen, deje esta sección vacía.</div>
+<h2>Indicios relacionados al hecho</h2>
+<div class="grid"><div class="field"><label>¿EXISTEN INDICIOS RELACIONADOS AL HECHO?</label>
+<select id="existenIndicios" onchange="evaluarIndicios()"><option value="NO">NO</option><option value="SI">SI</option></select></div></div>
+<div id="panelIndicios" style="display:none;margin-top:18px"><p class="note">Seleccione cada indicio encontrado e ingrese su cantidad y unidad.</p><div id="listaIndicios" class="grid"></div></div>
 </section>
-
 <!-- ACCIONES -->
+
 <section class="card">
+
     <h2>Acciones</h2>
+
     <div class="actions">
-        <button type="button" class="btn btn-success" onclick="guardarReporte()">GUARDAR</button>
+
+        
+
         <button type="button" class="btn btn-secondary" onclick="mostrarVistaPrevia()">VISTA PREVIA</button>
+
         <button type="button" class="btn btn-warning" onclick="limpiarFormulario()">LIMPIAR</button>
-        <button type="button" class="btn btn-danger" onclick="descargarCSV()">EXPORTAR CSV</button>
+
+        
+
     </div>
+
     <div id="status" class="status"></div>
+
 </section>
+
+
 
 <!-- VISTA PREVIA -->
+
 <section class="card" id="previewCard" style="display:none">
+
     <h2>Vista previa — REGISTRO DE REPORTES</h2>
+
     <div class="preview-wrap">
+
         <table id="previewTable">
+
             <thead></thead>
+
             <tbody></tbody>
+
         </table>
+
     </div>
+
     <div class="actions">
+
         <button type="button" id="btnEnviar" class="btn btn-success" onclick="enviarMatriz()">ENVIAR</button>
+
     </div>
+
     <div class="note">Verifique la información antes de enviarla.</div>
+
 </section>
+
+
 
 </div>
 
+
+
 <script>
-const CANTONES = {
-    "AZUAY": ["CUENCA", "CAMILO PONCE ENRÍQUEZ", "CHORDELEG", "EL PAN", "GIRÓN", "GUACHAPALA", "GUALACEO", "NABÓN", "OÑA", "PAUTE", "PUCARÁ", "SAN FERNANDO", "SANTA ISABEL", "SEVILLA DE ORO", "SÍGSIG"],
-    "BOLÍVAR": ["GUARANDA", "CHILLANES", "CHIMBO", "ECHEANDÍA", "LAS NAVES", "SAN MIGUEL", "CALUMA"],
-    "CAÑAR": ["AZOGUES", "BIBLIÁN", "CAÑAR", "DÉLEG", "EL TAMBO", "LA TRONCAL", "SUSCAL"],
-    "CARCHI": ["TULCÁN", "BOLÍVAR", "ESPEJO", "MIRA", "MONTÚFAR", "SAN PEDRO DE HUACA"],
-    "CHIMBORAZO": ["RIOBAMBA", "ALAUSÍ", "CHAMBO", "CHUNCHI", "COLTA", "CUMANDÁ", "GUAMOTE", "GUANO", "PALLATANGA", "PENIPE"],
-    "COTOPAXI": ["LATACUNGA", "LA MANÁ", "PANGUA", "PUJILÍ", "SALCEDO", "SAQUISILÍ", "SIGCHOS"],
-    "EL ORO": ["MACHALA", "ARENILLAS", "ATAHUALPA", "BALSAS", "CHILLA", "EL GUABO", "HUAQUILLAS", "LAS LAJAS", "MARCABELÍ", "PASAJE", "PIÑAS", "PORTOVELO", "SANTA ROSA", "ZARUMA"],
-    "ESMERALDAS": ["ESMERALDAS", "ATACAMES", "ELOY ALFARO", "MUISNE", "QUININDÉ", "RIOVERDE", "SAN LORENZO"],
-    "GALÁPAGOS": ["SAN CRISTÓBAL", "ISABELA", "SANTA CRUZ"],
-    "GUAYAS": ["GUAYAQUIL", "ALFREDO BAQUERIZO MORENO", "BALAO", "BALZAR", "COLIMES", "CORONEL MARCELINO MARIDUEÑA", "DAULE", "DURÁN", "EL EMPALME", "EL TRIUNFO", "GENERAL ANTONIO ELIZALDE", "ISIDRO AYORA", "LOMAS DE SARGENTILLO", "MILAGRO", "NARANJAL", "NARANJITO", "NOBOL", "PALESTINA", "PEDRO CARBO", "PLAYAS", "SALITRE", "SAMBORONDÓN", "SANTA LUCÍA", "SIMÓN BOLÍVAR", "YAGUACHI"],
-    "IMBABURA": ["IBARRA", "ANTONIO ANTE", "COTACACHI", "OTAVALO", "PIMAMPIRO", "SAN MIGUEL DE URCUQUÍ"],
-    "LOJA": ["LOJA", "CALVAS", "CATAMAYO", "CELICA", "CHAGUARPAMBA", "ESPÍNDOLA", "GONZANAMÁ", "MACARÁ", "OLMEDO", "PALTAS", "PINDAL", "PUYANGO", "QUILANGA", "SARAGURO", "SOZORANGA", "ZAPOTILLO"],
-    "LOS RÍOS": ["BABAHOYO", "BABA", "BUENA FE", "MOCACHE", "MONTALVO", "PALENQUE", "PUEBLOVIEJO", "QUEVEDO", "QUINSALOMA", "URDANETA", "VALENCIA", "VENTANAS", "VINCES"],
-    "MANABÍ": ["PORTOVIEJO", "24 DE MAYO", "BOLÍVAR", "CHONE", "EL CARMEN", "FLAVIO ALFARO", "JAMA", "JARAMIJÓ", "JIPIJAPA", "JUNÍN", "MANTA", "MONTECRISTI", "OLMEDO", "PAJÁN", "PEDERNALES", "PICHINCHA", "PUERTO LÓPEZ", "ROCAFUERTE", "SAN VICENTE", "SANTA ANA", "SUCRE", "TOSAGUA"],
-    "MORONA SANTIAGO": ["MORONA", "GUALAQUIZA", "HUAMBOYA", "LIMÓN INDANZA", "LOGROÑO", "PALORA", "PABLO SEXTO", "SAN JUAN BOSCO", "SANTIAGO", "SUCÚA", "TAISHA", "TIWINTZA"],
-    "NAPO": ["TENA", "ARCHIDONA", "CARLOS JULIO AROSEMENA TOLA", "EL CHACO", "QUIJOS"],
-    "PASTAZA": ["PASTAZA", "ARAJUNO", "MERA", "SANTA CLARA"],
-    "PICHINCHA": ["QUITO", "CAYAMBE", "MEJÍA", "PEDRO MONCAYO", "PEDRO VICENTE MALDONADO", "PUERTO QUITO", "RUMIÑAHUI", "SAN MIGUEL DE LOS BANCOS"],
-    "SANTA ELENA": ["SANTA ELENA", "LA LIBERTAD", "SALINAS"],
-    "SANTO DOMINGO DE LOS TSÁCHILAS": ["SANTO DOMINGO", "LA CONCORDIA"],
-    "SUCUMBÍOS": ["LAGO AGRIO", "CASCALES", "CUYABENO", "GONZALO PIZARRO", "PUTUMAYO", "SHUSHUFINDI", "SUCUMBÍOS"],
-    "TUNGURAHUA": ["AMBATO", "BAÑOS DE AGUA SANTA", "CEVALLOS", "MOCHA", "PATATE", "QUERO", "SAN PEDRO DE PELILEO", "SANTIAGO DE PÍLLARO", "TISALEO"],
-    "ZAMORA CHINCHIPE": ["ZAMORA", "CENTINELA DEL CÓNDOR", "CHINCHIPE", "EL PANGUI", "NANGARITZA", "PALANDA", "PAQUISHA", "YACUAMBI", "YANTZAZA"],
-    "ORELLANA": ["FRANCISCO DE ORELLANA", "AGUARICO", "LA JOYA DE LOS SACHAS", "LORETO"]
+
+const INDICIOS = {
+"ARMAS DE FUEGO":[["Pistola","Número"],["Revólver","Número"],["Carabina","Número"],["Fusil","Número"],["Escopeta","Número"],["Subametralladora","Número"],["Arma de fuego artesanal","Número"]],
+"MUNICIÓN Y ACCESORIOS":[["Munición / Cartuchos","Número"],["Alimentadora / Cargador","Número"],["Vainas / Casquillos","Número"]],
+"ARMAS BLANCAS":[["Cuchillo / Daga","Número"],["Machete","Número"],["Arma blanca artesanal / Punzón","Número"],["Hoja de afeitar / Gillette","Número"],["Herramienta cortopunzante modificada","Número"]],
+"SUSTANCIAS SUJETAS A FISCALIZACIÓN":[["Marihuana","Gramos"],["Cocaína","Gramos"],["Base de cocaína","Gramos"],["Heroína","Gramos"],["Drogas sintéticas","Gramos"],["Sustancias por determinar","Gramos"]],
+"EQUIPOS DE COMUNICACIÓN":[["Teléfono móvil (Smartphone / Básico)","Número"],["Radio de comunicación","Número"],["Tarjeta SIM / Chip","Número"],["Cargador / Cable USB","Número"],["Auriculares","Número"]],
+"DISPOSITIVOS DE ALMACENAMIENTO Y TECNOLOGÍA":[["Memoria USB","Número"],["Tarjeta MicroSD / SD","Número"],["Disco duro externo","Número"],["Laptop / Computadora","Número"],["Tablet","Número"]],
+"COMBUSTIBLES Y SUSTANCIAS LÍQUIDAS":[["Gasolina","Litros / Galones"],["Diésel","Litros / Galones"],["Kerosene","Litros / Galones"],["Precursores químicos","Litros / Galones"],["Alcohol / Licores","Litros / Galones"]],
+"DINERO EN EFECTIVO":[["Dólares ($ USD)","Monto"],["Pesos","Monto"],["Euros (€)","Monto"],["Otra moneda","Monto"]],
+"METALES Y MATERIAL PRECIOSO":[["Oro","Gramos"],["Plata","Gramos"],["Material aurífero / Mineral","Gramos / Kilogramos"]],
+"VEHÍCULOS":[["Automóvil / Camioneta","Número"],["Motocicleta","Número"],["Camión / Volqueta","Número"],["Maquinaria pesada (Retroexcavadora, etc.)","Número"],["Embarcación / Lancha","Número"]],
+"OBJETOS PROHIBIDOS Y CONTRABANDO":[["Pipas artesanales / Parafernalia","Número"],["Cigarrillos / Tabaco","Cajetillas / Unidades"],["Fármacos / Medicamentos no autorizados","Unidades / Blísteres"],["Panfletos / Documentos amenazantes","Número"]]
 };
+function construirIndicios(){
+ const cont=document.getElementById("listaIndicios");cont.innerHTML="";
+ Object.entries(INDICIOS).forEach(([categoria,items])=>{
+  const h=document.createElement("div");h.className="field full";h.innerHTML=`<h3 style="margin:10px 0 0;color:#17365d;border-bottom:1px solid #dbe2ea;padding-bottom:6px">${esc(categoria)}</h3>`;cont.appendChild(h);
+  items.forEach(([nombre,unidad])=>{
+   const item=document.createElement("div");item.className="indicio-item";
+   item.innerHTML=`<label class="indicio-titulo"><input type="checkbox" class="indicio-check" data-nombre="${esc(nombre)}" style="width:auto;margin-right:6px"> ${esc(nombre)}</label><div class="indicio-cantidad"><input type="number" min="0" step="any" class="indicio-qty" data-nombre="${esc(nombre)}" placeholder="Cantidad" disabled><select class="indicio-unit" data-nombre="${esc(nombre)}" disabled>${unidad.split(" / ").map(u=>`<option>${esc(u)}</option>`).join("")}</select></div>`;
+   const c=item.querySelector(".indicio-check"),q=item.querySelector(".indicio-qty"),u=item.querySelector(".indicio-unit");
+   c.addEventListener("change",()=>{q.disabled=!c.checked;u.disabled=!c.checked;if(!c.checked)q.value=""});cont.appendChild(item);
+  });
+ });
+}
+function evaluarIndicios(){
+ const si=document.getElementById("existenIndicios").value==="SI";document.getElementById("panelIndicios").style.display=si?"block":"none";
+ if(!si){document.querySelectorAll(".indicio-check").forEach(x=>x.checked=false);document.querySelectorAll(".indicio-qty").forEach(x=>{x.value="";x.disabled=true});document.querySelectorAll(".indicio-unit").forEach(x=>x.disabled=true)}
+}
+function obtenerDetalleIndicios(){
+ if(document.getElementById("existenIndicios").value!=="SI")return "";
+ return [...document.querySelectorAll(".indicio-check:checked")].map(c=>{const n=c.dataset.nombre,q=[...document.querySelectorAll(".indicio-qty")].find(x=>x.dataset.nombre===n),u=[...document.querySelectorAll(".indicio-unit")].find(x=>x.dataset.nombre===n);return `${n}: ${q.value||"Cantidad no especificada"} ${u.value}`}).join(" | ");
+}
+const CANTONES = {
+
+    "AZUAY": ["CUENCA", "CAMILO PONCE ENRÍQUEZ", "CHORDELEG", "EL PAN", "GIRÓN", "GUACHAPALA", "GUALACEO", "NABÓN", "OÑA", "PAUTE", "PUCARÁ", "SAN FERNANDO", "SANTA ISABEL", "SEVILLA DE ORO", "SÍGSIG"],
+
+    "BOLÍVAR": ["GUARANDA", "CHILLANES", "CHIMBO", "ECHEANDÍA", "LAS NAVES", "SAN MIGUEL", "CALUMA"],
+
+    "CAÑAR": ["AZOGUES", "BIBLIÁN", "CAÑAR", "DÉLEG", "EL TAMBO", "LA TRONCAL", "SUSCAL"],
+
+    "CARCHI": ["TULCÁN", "BOLÍVAR", "ESPEJO", "MIRA", "MONTÚFAR", "SAN PEDRO DE HUACA"],
+
+    "CHIMBORAZO": ["RIOBAMBA", "ALAUSÍ", "CHAMBO", "CHUNCHI", "COLTA", "CUMANDÁ", "GUAMOTE", "GUANO", "PALLATANGA", "PENIPE"],
+
+    "COTOPAXI": ["LATACUNGA", "LA MANÁ", "PANGUA", "PUJILÍ", "SALCEDO", "SAQUISILÍ", "SIGCHOS"],
+
+    "EL ORO": ["MACHALA", "ARENILLAS", "ATAHUALPA", "BALSAS", "CHILLA", "EL GUABO", "HUAQUILLAS", "LAS LAJAS", "MARCABELÍ", "PASAJE", "PIÑAS", "PORTOVELO", "SANTA ROSA", "ZARUMA"],
+
+    "ESMERALDAS": ["ESMERALDAS", "ATACAMES", "ELOY ALFARO", "MUISNE", "QUININDÉ", "RIOVERDE", "SAN LORENZO"],
+
+    "GALÁPAGOS": ["SAN CRISTÓBAL", "ISABELA", "SANTA CRUZ"],
+
+    "GUAYAS": ["GUAYAQUIL", "ALFREDO BAQUERIZO MORENO", "BALAO", "BALZAR", "COLIMES", "CORONEL MARCELINO MARIDUEÑA", "DAULE", "DURÁN", "EL EMPALME", "EL TRIUNFO", "GENERAL ANTONIO ELIZALDE", "ISIDRO AYORA", "LOMAS DE SARGENTILLO", "MILAGRO", "NARANJAL", "NARANJITO", "NOBOL", "PALESTINA", "PEDRO CARBO", "PLAYAS", "SALITRE", "SAMBORONDÓN", "SANTA LUCÍA", "SIMÓN BOLÍVAR", "YAGUACHI"],
+
+    "IMBABURA": ["IBARRA", "ANTONIO ANTE", "COTACACHI", "OTAVALO", "PIMAMPIRO", "SAN MIGUEL DE URCUQUÍ"],
+
+    "LOJA": ["LOJA", "CALVAS", "CATAMAYO", "CELICA", "CHAGUARPAMBA", "ESPÍNDOLA", "GONZANAMÁ", "MACARÁ", "OLMEDO", "PALTAS", "PINDAL", "PUYANGO", "QUILANGA", "SARAGURO", "SOZORANGA", "ZAPOTILLO"],
+
+    "LOS RÍOS": ["BABAHOYO", "BABA", "BUENA FE", "MOCACHE", "MONTALVO", "PALENQUE", "PUEBLOVIEJO", "QUEVEDO", "QUINSALOMA", "URDANETA", "VALENCIA", "VENTANAS", "VINCES"],
+
+    "MANABÍ": ["PORTOVIEJO", "24 DE MAYO", "BOLÍVAR", "CHONE", "EL CARMEN", "FLAVIO ALFARO", "JAMA", "JARAMIJÓ", "JIPIJAPA", "JUNÍN", "MANTA", "MONTECRISTI", "OLMEDO", "PAJÁN", "PEDERNALES", "PICHINCHA", "PUERTO LÓPEZ", "ROCAFUERTE", "SAN VICENTE", "SANTA ANA", "SUCRE", "TOSAGUA"],
+
+    "MORONA SANTIAGO": ["MORONA", "GUALAQUIZA", "HUAMBOYA", "LIMÓN INDANZA", "LOGROÑO", "PALORA", "PABLO SEXTO", "SAN JUAN BOSCO", "SANTIAGO", "SUCÚA", "TAISHA", "TIWINTZA"],
+
+    "NAPO": ["TENA", "ARCHIDONA", "CARLOS JULIO AROSEMENA TOLA", "EL CHACO", "QUIJOS"],
+
+    "PASTAZA": ["PASTAZA", "ARAJUNO", "MERA", "SANTA CLARA"],
+
+    "PICHINCHA": ["QUITO", "CAYAMBE", "MEJÍA", "PEDRO MONCAYO", "PEDRO VICENTE MALDONADO", "PUERTO QUITO", "RUMIÑAHUI", "SAN MIGUEL DE LOS BANCOS"],
+
+    "SANTA ELENA": ["SANTA ELENA", "LA LIBERTAD", "SALINAS"],
+
+    "SANTO DOMINGO DE LOS TSÁCHILAS": ["SANTO DOMINGO", "LA CONCORDIA"],
+
+    "SUCUMBÍOS": ["LAGO AGRIO", "CASCALES", "CUYABENO", "GONZALO PIZARRO", "PUTUMAYO", "SHUSHUFINDI", "SUCUMBÍOS"],
+
+    "TUNGURAHUA": ["AMBATO", "BAÑOS DE AGUA SANTA", "CEVALLOS", "MOCHA", "PATATE", "QUERO", "SAN PEDRO DE PELILEO", "SANTIAGO DE PÍLLARO", "TISALEO"],
+
+    "ZAMORA CHINCHIPE": ["ZAMORA", "CENTINELA DEL CÓNDOR", "CHINCHIPE", "EL PANGUI", "NANGARITZA", "PALANDA", "PAQUISHA", "YACUAMBI", "YANTZAZA"],
+
+    "ORELLANA": ["FRANCISCO DE ORELLANA", "AGUARICO", "LA JOYA DE LOS SACHAS", "LORETO"]
+
+};
+
+
 
 const SUBAMBITOS = {
+
     "1. GOBERNABILIDAD E INSTITUCIONALIDAD DEL ESTADO": ["CRISIS INSTITUCIONALES", "PROCESOS ELECTORALES", "CONFLICTOS POLÍTICO-INSTITUCIONALES", "AMENAZAS CONTRA INSTITUCIONES DEL ESTADO", "AFECTACIONES A LA GOBERNABILIDAD", "FUNCIONAMIENTO DE ENTIDADES PÚBLICAS"],
+
     "2. CONFLICTIVIDAD SOCIAL Y MOVILIZACIÓN": ["MOVILIZACIONES", "MANIFESTACIONES", "HUELGAS Y PARALIZACIONES", "CONFLICTOS COMUNITARIOS", "CONFLICTOS SOCIOAMBIENTALES", "ORGANIZACIONES SOCIALES", "ORGANIZACIONES LABORALES", "SECTOR ESTUDIANTIL", "ORGANIZACIONES INDÍGENAS"],
+
     "3. ENTORNO INTERNACIONAL Y FRONTERIZO": ["GEOPOLÍTICA", "RELACIONES ENTRE ESTADOS", "CONFLICTOS INTERNACIONALES", "SEGURIDAD FRONTERIZA", "CRIMEN TRANSNACIONAL", "NARCOTRÁFICO TRANSFRONTERIZO", "TRÁFICO TRANSFRONTERIZO DE ARMAS", "COOPERACIÓN INTERNACIONAL"],
+
     "4. SECTORES ESTRATÉGICOS E INFRAESTRUCTURA CRÍTICA": ["MINERÍA", "MINERÍA ILEGAL", "PROYECTOS MINEROS", "HIDROCARBUROS", "ENERGÍA ELÉCTRICA", "TELECOMUNICACIONES", "AGUA", "INFRAESTRUCTURA CRÍTICA", "OTROS SECTORES ESTRATÉGICOS"],
+
     "5. CRIMINALIDAD Y DELINCUENCIA ORGANIZADA": ["CRIMEN ORGANIZADO", "NARCOTRÁFICO", "HOMICIDIO", "SECUESTRO", "EXTORSIÓN", "TRÁFICO DE ARMAS", "TRATA DE PERSONAS", "TERRORISMO", "DELINCUENCIA COMÚN", "VIOLENCIA CRIMINAL"],
+
     "6. CENTROS DE PRIVACIÓN DE LIBERTAD": ["OPERATIVOS EN C.P.L.", "MONITOREO DE C.P.L.", "DECOMISO DE OBJETOS PROHIBIDOS", "INGRESO DE PPL", "SALIDA DE PPL", "REUBICACIÓN DE PPL", "FALLECIMIENTO DE PPL", "PERSONAS HERIDAS EN C.P.L.", "TRASLADO A HOSPITAL PPL", "DELITOS COMETIDOS EN C.P.L.", "OPERACIÓN CAMEX", "OPERACIÓN ATLAS", "OTRAS ACTIVIDADES EN C.P.L."],
+
     "7. ACTIVIDAD JUDICIAL Y CUMPLIMIENTO DE DISPOSICIONES": ["INSTALACIÓN DE AUDIENCIAS", "DILIGENCIAS JUDICIALES CON PPL", "CUMPLIMIENTO DE BOLETAS", "DISPOSICIONES JUDICIALES", "TRASLADOS PARA DILIGENCIAS JUDICIALES"],
+
     "8. SEGURIDAD Y OPERACIONES POLICIALES": ["OPERATIVOS POLICIALES", "LEVANTAMIENTO DE INFORMACIÓN", "RECONSTRUCCIÓN DE LOS HECHOS", "VERIFICACIÓN DE PERSONAS Y OBJETOS EN ACTITUD INUSUAL", "INCAUTACIÓN DE ARMAS DE FUEGO Y MUNICIONES", "OPERACIÓN CAMEX", "OPERACIÓN ATLAS"],
+
     "9. INCIDENTES, EMERGENCIAS Y AFECTACIONES A PERSONAS": ["PERSONAS FALLECIDAS", "PERSONAS HERIDAS", "PERSONAS DESAPARECIDAS", "INCENDIOS", "ACCIDENTES", "EMERGENCIAS", "OTROS INCIDENTES RELEVANTES"],
+
     "10. EVENTOS Y CONCENTRACIONES DE PERSONAS": ["ENCUENTROS DEPORTIVOS", "EVENTOS MASIVOS", "CONCENTRACIONES PÚBLICAS", "ACTIVIDADES PÚBLICAS", "EVENTOS DE RELEVANCIA"],
+
     "11. SERVIDORES POLICIALES E INSTITUCIONALIDAD POLICIAL": ["NOVEDADES CON SERVIDORES POLICIALES", "EVALUACIONES FÍSICAS DE SERVIDORES POLICIALES", "ACCIDENTES DE SERVIDORES POLICIALES", "NOVEDADES EN INSTALACIONES POLICIALES", "ACTIVIDADES INSTITUCIONALES"]
+
 };
 
+
+
 const FUENTES = [
+
     "SZI-CARCHI", "SZI-SUCUMBIOS", "SZI-IMBABURA", "SZI-ESMERALDAS", "SZI-NAPO", "SZI-ORELLANA", "SZI-PICHINCHA", "SZI-TUNGURAHUA", "SZI-PASTAZA", "SZI-COTOPAXI", "SZI-CHIMBORAZO", "SZI-MANABI-PORTOVIEJO", "SZI-MANABI-MANTA", "SZI-SANTO DOMINGO", "SZI-BOLIVAR", "SZI-LOS RIOS BABAHOYO", "SZI-LOS RIOS QUEVEDO", "SZI-SANTA ELENA", "SZI-GALAPAGOS", "SZI-GUAYAS-MILAGRO", "SZI-AZUAY", "SZI-CAÑAR", "SZI-MORONA SANTIAGO", "SZI-EL ORO", "SZI-LOJA", "SZI-ZAMORA CHINCHIPE", "SZI-ZONA 9", "SZI-ZONA 8", "UNIP", "UNIT", "UNISOP", "UNIAM"
+
 ];
+
+
 
 const HEADERS = [
-    "FECHA", "HORA", "PROVINCIA", "CANTÓN", "LUGAR / SECTOR", "COORDENADAS", "ÁMBITO", "TEMA / SUBÁMBITO / FENÓMENO", "REPORTE", "APELLIDOS Y NOMBRES", "CÉDULA / RUC", "CARGO / FUNCIÓN", "NOVEDAD / HECHO PRINCIPAL", "AFECTACIÓN / RESULTADO", "NIVEL DE RELEVANCIA", "FUENTE", "INTERVENCION", "DETENIDOS", "DETENIDO_NOMBRE", "DETENIDO_CEDULA", "DETENIDO_NACIONALIDAD", "DETENIDO_ALIAS"
+
+    "FECHA", "HORA", "PROVINCIA", "CANTÓN", "LUGAR / SECTOR", "COORDENADAS", "ÁMBITO", "TEMA / SUBÁMBITO / FENÓMENO", "REPORTE", "NOVEDAD / HECHO PRINCIPAL", "AFECTACIÓN / RESULTADO", "NIVEL DE RELEVANCIA", "FUENTE", "INTERVENCION", "DETENIDOS", "DETENIDO_NOMBRE", "DETENIDO_CEDULA", "DETENIDO_NACIONALIDAD", "DETENIDO_ALIAS", "¿EXISTEN INDICIOS?", "DETALLES DE INDICIOS"
+
 ];
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyHgKKaVK7Ok1kE7rXZKkaDOBbkDAHsQLcIpZRRyAj9CAJlXQlGmWSj-cI4lDoXhUH4-w/exec";
+
+
+const WEB_APP_URL = "https\://script.google.com/macros/s/AKfycbyHgKKaVK7Ok1kE7rXZKkaDOBbkDAHsQLcIpZRRyAj9CAJlXQlGmWSj-cI4lDoXhUH4-w/exec";
+
+
 
 let registros = JSON.parse(localStorage.getItem("REGISTRO_REPORTES") || "[]");
 
+
+
 window.onload = function() {
+    construirIndicios();
+
     const provSelect = document.getElementById("provincia");
+
     Object.keys(CANTONES).forEach(prov => {
+
         const o = document.createElement("option");
+
         o.value = prov;
+
         o.textContent = prov;
+
         provSelect.appendChild(o);
+
     });
+
+
 
     const ambSelect = document.getElementById("ambito");
+
     Object.keys(SUBAMBITOS).forEach(amb => {
+
         const o = document.createElement("option");
+
         o.value = amb;
+
         o.textContent = amb;
+
         ambSelect.appendChild(o);
+
     });
+
+
 
     const fueSelect = document.getElementById("fuente");
+
     FUENTES.forEach(f => {
+
         const o = document.createElement("option");
+
         o.value = f;
+
         o.textContent = f;
+
         fueSelect.appendChild(o);
+
     });
+
 };
 
+
+
 function evaluarOtrasIntervencion() {
+
     const sel = document.getElementById("intervencion").value;
+
     const campoOtras = document.getElementById("intervencionOtras");
+
     if (sel === "OTRAS") {
+
         campoOtras.style.display = "block";
+
         campoOtras.focus();
+
     } else {
+
         campoOtras.style.display = "none";
+
         campoOtras.value = "";
+
     }
+
 }
+
+
 
 function evaluarDetenidos() {
+
     const sel = document.getElementById("detenidos").value;
+
     const card = document.getElementById("cardDetenidos");
+
     if (sel === "SI") {
+
         card.style.display = "block";
+
         if (document.getElementById("contenedorDetenidos").children.length === 0) {
+
             agregarDetenido();
+
         }
+
     } else {
+
         card.style.display = "none";
+
         document.getElementById("contenedorDetenidos").innerHTML = "";
+
     }
+
 }
+
+
 
 function actualizarCantones() {
+
     const prov = document.getElementById("provincia").value;
+
     const c = document.getElementById("canton");
+
     c.innerHTML = '<option value="">Seleccione cantón...</option>';
+
     (CANTONES[prov] || []).forEach(x => {
+
         const o = document.createElement("option");
+
         o.value = x;
+
         o.textContent = x;
+
         c.appendChild(o);
+
     });
+
 }
+
+
 
 function actualizarSubambitos() {
+
     const ambito = document.getElementById("ambito").value;
+
     const s = document.getElementById("subambito");
+
     s.innerHTML = '<option value="">Seleccione subámbito...</option>';
+
     (SUBAMBITOS[ambito] || []).forEach(x => {
+
         const o = document.createElement("option");
+
         o.value = x;
+
         o.textContent = x;
+
         s.appendChild(o);
+
     });
+
 }
+
+
 
 function evaluarAliasOtras(element) {
+
     const row = element.closest('.detenido-row');
+
     const inputManual = row.querySelector('.detenido-alias-manual');
+
     if (element.value === "OTRAS") {
+
         inputManual.style.display = "block";
+
         inputManual.focus();
+
     } else {
+
         inputManual.style.display = "none";
+
         inputManual.value = "";
+
     }
+
 }
 
-function agregarPersona() {
-    const d = document.createElement("div");
-    d.className = "person-row";
-    d.innerHTML = `
-        <div class="field">
-            <label>APELLIDOS Y NOMBRES</label>
-            <input class="persona-nombre" placeholder="Apellidos y nombres">
-        </div>
-        <div class="field">
-            <label>CÉDULA / RUC</label>
-            <input class="persona-cedula" placeholder="Identificación">
-        </div>
-        <div class="field">
-            <label>CARGO / FUNCIÓN</label>
-            <input class="persona-cargo" placeholder="Cargo o función">
-        </div>
-        <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">ELIMINAR</button>
-    `;
-    document.getElementById("personas").appendChild(d);
-}
+
 
 function agregarDetenido() {
+
     const d = document.createElement("div");
+
     d.className = "detenido-row";
+
     d.innerHTML = `
+
         <div class="field">
+
             <label>NOMBRES Y APELLIDOS</label>
+
             <input class="detenido-nombre" placeholder="Nombres completos">
+
         </div>
+
         <div class="field">
+
             <label>CÉDULA / PASAPORTE</label>
+
             <input class="detenido-cedula" placeholder="Nro. documento">
+
         </div>
+
         <div class="field">
+
             <label>NACIONALIDAD</label>
+
             <input class="detenido-nacionalidad" placeholder="Ej. Ecuatoriana">
+
         </div>
+
         <div class="field">
+
             <label>CALIDAD DE ACTUACIÓN</label>
+
             <select class="detenido-alias-select" onchange="evaluarAliasOtras(this)">
+
                 <option value="">Seleccione...</option>
+
                 <option value="DETENIDO/APREHENDIDO">DETENIDO/APREHENDIDO</option>
+
                 <option value="FALLECIDO">FALLECIDO</option>
+
                 <option value="HERIDO">HERIDO</option>
+
                 <option value="PPL">PPL</option>
+
                 <option value="OTRAS">OTRAS</option>
+
             </select>
+
             <input class="detenido-alias-manual" placeholder="Especifique..." style="display:none; margin-top:6px;">
+
         </div>
+
         <button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">ELIMINAR</button>
+
     `;
+
     document.getElementById("contenedorDetenidos").appendChild(d);
+
 }
+
+
 
 function datosBase() {
+
     let valIntervencion = document.getElementById("intervencion").value;
+
     if (valIntervencion === "OTRAS") {
+
         const txtOtras = document.getElementById("intervencionOtras").value.trim();
+
         valIntervencion = txtOtras ? "OTRAS: " + txtOtras : "OTRAS";
+
     }
 
+
+
     return {
+
         "FECHA": document.getElementById("fecha").value,
+
         "HORA": document.getElementById("hora").value,
+
         "PROVINCIA": document.getElementById("provincia").value,
+
         "CANTÓN": document.getElementById("canton").value,
+
         "LUGAR / SECTOR": document.getElementById("lugar").value.trim(),
+
         "COORDENADAS": document.getElementById("coordenadas").value.trim(),
+
         "ÁMBITO": document.getElementById("ambito").value,
+
         "TEMA / SUBÁMBITO / FENÓMENO": document.getElementById("subambito").value,
+
         "REPORTE": document.getElementById("reporte").value.trim(),
+
         "NOVEDAD / HECHO PRINCIPAL": document.getElementById("novedad").value.trim(),
+
         "AFECTACIÓN / RESULTADO": document.getElementById("afectacion").value.trim(),
+
         "NIVEL DE RELEVANCIA": document.getElementById("relevancia").value,
+
         "FUENTE": document.getElementById("fuente").value,
+
         "INTERVENCION": valIntervencion,
-        "DETENIDOS": document.getElementById("detenidos").value
+
+        "DETENIDOS": document.getElementById("detenidos").value,
+        "¿EXISTEN INDICIOS?": document.getElementById("existenIndicios").value,
+        "DETALLES DE INDICIOS": obtenerDetalleIndicios()
+
     };
+
 }
+
+
 
 function obtenerRegistros() {
     const b = datosBase();
-    const personas = [...document.querySelectorAll(".person-row")];
     const detenidos = [...document.querySelectorAll(".detenido-row")];
-
     let detLista = [];
     if (b["DETENIDOS"] === "SI" && detenidos.length > 0) {
         detLista = detenidos.map(x => {
             const selAlias = x.querySelector(".detenido-alias-select").value;
             const txtManual = x.querySelector(".detenido-alias-manual").value.trim();
-            let aliasFinal = selAlias;
-            if (selAlias === "OTRAS") {
-                aliasFinal = txtManual;
-            }
             return {
                 "DETENIDO_NOMBRE": x.querySelector(".detenido-nombre").value.trim(),
                 "DETENIDO_CEDULA": x.querySelector(".detenido-cedula").value.trim(),
                 "DETENIDO_NACIONALIDAD": x.querySelector(".detenido-nacionalidad").value.trim(),
-                "DETENIDO_ALIAS": aliasFinal
+                "DETENIDO_ALIAS": selAlias === "OTRAS" ? txtManual : selAlias
             };
         });
     } else {
-        detLista = [{
-            "DETENIDO_NOMBRE": "",
-            "DETENIDO_CEDULA": "",
-            "DETENIDO_NACIONALIDAD": "",
-            "DETENIDO_ALIAS": ""
-        }];
+        detLista = [{"DETENIDO_NOMBRE":"","DETENIDO_CEDULA":"","DETENIDO_NACIONALIDAD":"","DETENIDO_ALIAS":""}];
     }
-
-    let perLista = [];
-    if (personas.length > 0) {
-        perLista = personas.map(x => ({
-            "APELLIDOS Y NOMBRES": x.querySelector(".persona-nombre").value.trim(),
-            "CÉDULA / RUC": x.querySelector(".persona-cedula").value.trim(),
-            "CARGO / FUNCIÓN": x.querySelector(".persona-cargo").value.trim()
-        }));
-    } else {
-        perLista = [{
-            "APELLIDOS Y NOMBRES": "",
-            "CÉDULA / RUC": "",
-            "CARGO / FUNCIÓN": ""
-        }];
-    }
-
-    let resultadoFinal = [];
-    perLista.forEach(p => {
-        detLista.forEach(d => {
-            resultadoFinal.push({
-                ...b,
-                ...p,
-                ...d
-            });
-        });
-    });
-
-    return resultadoFinal;
-}
-
-function guardarReporte() {
-    const d = obtenerRegistros();
-    registros.push(...d);
-    localStorage.setItem("REGISTRO_REPORTES", JSON.stringify(registros));
-    estado("Reporte guardado correctamente. Registros agregados: " + d.length, "ok");
-    mostrarVistaPrevia();
+    return detLista.map(d => ({...b, ...d}));
 }
 
 function mostrarVistaPrevia() {
+
     const d = obtenerRegistros();
+
     const t = document.getElementById("previewTable");
 
+
+
     t.querySelector("thead").innerHTML = "<tr>" + HEADERS.map(h => `<th>${h}</th>`).join("") + "</tr>";
+
     t.querySelector("tbody").innerHTML = d.map(r => "<tr>" + HEADERS.map(h => `<td>${esc(r[h] || "")}</td>`).join("") + "</tr>").join("");
 
+
+
     document.getElementById("previewCard").style.display = "block";
+
     document.getElementById("previewCard").scrollIntoView({ behavior: "smooth" });
+
 }
 
+
+
 async function enviarMatriz() {
+
     const registrosEnviar = obtenerRegistros();
 
+
+
     if (!registrosEnviar || registrosEnviar.length === 0) {
+
         alert("No existen registros para enviar.");
+
         return;
+
     }
+
+
 
     const boton = document.getElementById("btnEnviar");
+
     if (boton) {
+
         boton.disabled = true;
+
         boton.innerText = "ENVIANDO...";
+
     }
 
+
+
     try {
+
         const formData = new URLSearchParams();
+
         formData.append("rows", JSON.stringify(registrosEnviar));
 
+
+
         await fetch(WEB_APP_URL, {
+
             method: "POST",
+
             mode: "no-cors",
+
             headers: {
+
                 "Content-Type": "application/x-www-form-urlencoded"
+
             },
+
             body: formData.toString()
+
         });
+
+
 
         alert("✅ INFORMACIÓN ENVIADA CORRECTAMENTE\n\nLos registros fueron enviados a Google Sheets.\n\nRevise la hoja:\nREGISTRO DE REPORTES");
 
+
+
     } catch (error) {
+
         console.error("Error al enviar:", error);
+
         alert("❌ NO SE PUDO ENVIAR LA INFORMACIÓN\n\nError: " + error.message);
+
     } finally {
+
         if (boton) {
+
             boton.disabled = false;
+
             boton.innerText = "ENVIAR";
+
         }
+
     }
+
 }
 
-function descargarCSV() {
-    const d = registros.length ? registros : obtenerRegistros();
-    let csv = "\ufeff" + HEADERS.join(",") + "\n";
 
-    d.forEach(r => {
-        csv += HEADERS.map(h => `"${String(r[h] || "").replace(/"/g, '""')}"`).join(",") + "\n";
-    });
-
-    const a = document.createElement("a");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-    a.href = window.URL.createObjectURL(blob);
-    a.download = "REGISTRO_DE_REPORTES.csv";
-    a.click();
-}
 
 function limpiarFormulario() {
+
     document.querySelectorAll("input,textarea").forEach(x => x.value = "");
+
     document.querySelectorAll("select").forEach(x => x.selectedIndex = 0);
+
     document.getElementById("intervencionOtras").style.display = "none";
+
     document.getElementById("cardDetenidos").style.display = "none";
+
     document.getElementById("contenedorDetenidos").innerHTML = "";
+
     document.getElementById("canton").innerHTML = '<option value="">Seleccione primero provincia...</option>';
+
     document.getElementById("subambito").innerHTML = '<option value="">Seleccione primero un ámbito...</option>';
-    document.getElementById("personas").innerHTML = "";
+
+
+
+    document.getElementById("existenIndicios").value = "NO";
+    evaluarIndicios();
     document.getElementById("previewCard").style.display = "none";
+
     document.getElementById("status").className = "status";
+
     document.getElementById("status").textContent = "";
+
 }
+
+
 
 function estado(texto, clase) {
+
     const x = document.getElementById("status");
+
     x.textContent = texto;
+
     x.className = "status " + clase;
+
 }
+
+
 
 function esc(t) {
+
     return String(t)
+
         .replace(/&/g, "&amp;")
+
         .replace(/</g, "&lt;")
+
         .replace(/>/g, "&gt;")
+
         .replace(/"/g, "&quot;")
+
         .replace(/'/g, "&#039;");
+
 }
+
 </script>
 
+
+
 </body>
+
 </html>
